@@ -1,0 +1,42 @@
+import { routes } from '../stores';
+import { Http, MiddlewareToken } from '../types';
+
+type HttpConfig = {
+  middlewares: MiddlewareToken[];
+};
+
+const defaultConfig: HttpConfig = {
+  middlewares: []
+};
+
+function createRoute(http: Http, path: string, config: HttpConfig): MethodDecorator {
+  const { middlewares } = config;
+
+  return ({ constructor }, key) => {
+    routes.push(constructor, { http, key, middlewares, path });
+  };
+}
+
+export function Post(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Post, path, { ...defaultConfig, ...config });
+}
+
+export function Get(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Get, path, { ...defaultConfig, ...config });
+}
+
+export function Put(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Put, path, { ...defaultConfig, ...config });
+}
+
+export function Delete(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Delete, path, { ...defaultConfig, ...config });
+}
+
+export function Patch(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Patch, path, { ...defaultConfig, ...config });
+}
+
+export function Options(path = '/', config?: Partial<HttpConfig>): MethodDecorator {
+  return createRoute(Http.Options, path, { ...defaultConfig, ...config });
+}

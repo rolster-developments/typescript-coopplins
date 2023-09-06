@@ -1,5 +1,5 @@
-import factoryInject from '@xofttion/dependency-injection';
-import { Optional } from '@xofttion/utils';
+import createFromInvertly from '@rolster/typescript-invertly';
+import { Optional } from '@rolster/typescript-utils';
 import { NextFunction, Request, Response } from 'express';
 import { middlewares } from '../stores';
 import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
@@ -23,15 +23,15 @@ export function createMiddleware(token: MiddlewareToken): Optional<MiddlewareRou
     );
   }
 
-  const middleware = factoryInject({ config: { token } });
+  const middleware = createFromInvertly({ config: { token } });
 
   return isMiddleware(middleware)
     ? Optional.of((req: Request, res: Response, next: NextFunction) => {
-        return middleware.call(req, res, next);
+        return middleware.execute(req, res, next);
       })
     : Optional.empty();
 }
 
 function isMiddleware(middleware: any): middleware is OnMiddleware {
-  return typeof middleware['call'] === 'function';
+  return typeof middleware['execute'] === 'function';
 }

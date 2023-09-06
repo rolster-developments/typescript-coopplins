@@ -1,4 +1,4 @@
-import factoryInject from '@xofttion/dependency-injection';
+import createFromInvertly from '@rolster/typescript-invertly';
 import express, { Express, Request, Response } from 'express';
 import {
   createHttpArguments,
@@ -42,7 +42,7 @@ function createCallback(config: LambdaCallback): RouteCallback {
   const { token, error } = config;
 
   return createWrap((request: Request, response: Response) => {
-    const object = factoryInject<any>({
+    const object = createFromInvertly<any>({
       config: { token, context: fetchContext(request) }
     });
 

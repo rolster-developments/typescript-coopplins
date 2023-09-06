@@ -1,4 +1,4 @@
-import { parse } from '@xofttion/utils';
+import { parse } from '@rolster/typescript-utils';
 import dotenv, { DotenvConfigOptions } from 'dotenv';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';

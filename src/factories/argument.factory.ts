@@ -1,5 +1,5 @@
-import factoryInject from '@xofttion/dependency-injection';
-import { parseBoolean } from '@xofttion/utils';
+import createFromInvertly from '@rolster/typescript-invertly';
+import { parseBoolean } from '@rolster/typescript-utils';
 import { Request } from 'express';
 import { args } from '../stores';
 import { ArgumentsDataType, ArgumentsType, fetchContext } from '../types';
@@ -27,24 +27,20 @@ export function createHttpArguments(config: ArgumentConfig): any[] {
         values.push(key ? request.body[key] : request.body);
         break;
       case ArgumentsType.Header:
-        values.push(
-          key ? getArgumentValue(request.headers[key], dataType) : undefined
-        );
+        values.push(key ? fetchValue(request.headers[key], dataType) : undefined);
         break;
       case ArgumentsType.Path:
-        values.push(
-          key ? getArgumentValue(request.params[key], dataType) : undefined
-        );
+        values.push(key ? fetchValue(request.params[key], dataType) : undefined);
         break;
       case ArgumentsType.Query:
-        values.push(
-          key ? getArgumentValue(request.query[key], dataType) : undefined
-        );
+        values.push(key ? fetchValue(request.query[key], dataType) : undefined);
         break;
       case ArgumentsType.Inject:
         values.push(
           token
-            ? factoryInject({ config: { token, context: fetchContext(request) } })
+            ? createFromInvertly({
+                config: { token, context: fetchContext(request) }
+              })
             : undefined
         );
         break;
@@ -54,7 +50,7 @@ export function createHttpArguments(config: ArgumentConfig): any[] {
   return values;
 }
 
-function getArgumentValue(value: any, dataType?: ArgumentsDataType): any {
+function fetchValue(value: any, dataType?: ArgumentsDataType): any {
   if (!value || !dataType) {
     return value;
   }

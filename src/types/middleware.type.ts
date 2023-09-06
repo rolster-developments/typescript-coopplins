@@ -6,5 +6,5 @@ export type MiddlewareToken = Function | RequestHandler | ValidationChain[];
 export type MiddlewareRoute = RequestHandler | ValidationChain[];
 
 export interface OnMiddleware {
-  call(request: Request, response: Response, next: NextFunction): any;
+  execute(request: Request, response: Response, next: NextFunction): any;
 }

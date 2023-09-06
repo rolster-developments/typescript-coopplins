@@ -1,6 +1,9 @@
-import factoryInject, { Context, Injectable } from '@xofttion/dependency-injection';
-import { Constructable } from '@xofttion/dependency-injection/types';
-import { promiseFrom } from '@xofttion/utils';
+import createFromInvertly, {
+  Context,
+  Injectable
+} from '@rolster/typescript-invertly';
+import { Constructable } from '@rolster/typescript-invertly/dist/esm/types';
+import { promiseFrom } from '@rolster/typescript-utils';
 
 export abstract class Subscriber<T = unknown> {
   abstract execute(value: T): any | Promise<any>;
@@ -32,7 +35,7 @@ export function emitPubSub<T>(config: Emitter<T>): Promise<any[]> {
   if (subscriptions) {
     return Promise.all(
       Array.from(subscriptions).map((token) => {
-        const subcription = factoryInject({ config: { token, context } });
+        const subcription = createFromInvertly({ config: { token, context } });
 
         return promiseFrom(subcription.execute(value));
       })
@@ -42,7 +45,7 @@ export function emitPubSub<T>(config: Emitter<T>): Promise<any[]> {
   return Promise.resolve([]);
 }
 
-@Injectable()
+@Injectable({ singleton: false })
 export class PubSub {
   constructor(private context?: Context) {}
 

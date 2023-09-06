@@ -1,4 +1,4 @@
-import { registerInjectable } from '@xofttion/dependency-injection';
+import { registerInjectable } from '@rolster/typescript-invertly';
 import { middlewares } from '../stores';
 
 export function Middleware(): ClassDecorator {

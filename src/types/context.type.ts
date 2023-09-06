@@ -1,6 +1,6 @@
-import { Context } from '@xofttion/dependency-injection';
+import { Context } from '@rolster/typescript-invertly';
 
-const KEY = 'copplinsContext';
+const KEY = 'rolsterContext';
 
 export function fetchContext(request: any): Undefined<Context> {
   return request[KEY] instanceof Context ? request[KEY] : undefined;

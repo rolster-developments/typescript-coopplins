@@ -1,4 +1,4 @@
-import { Optional } from '@xofttion/utils';
+import { Optional } from '@rolster/typescript-utils';
 import { LambdaConfig } from '../types';
 
 type LambdaMap = Map<Function, LambdaConfig>;

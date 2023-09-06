@@ -1,4 +1,4 @@
-import { InjectableToken } from '@xofttion/dependency-injection';
+import { InjectableToken } from '@rolster/typescript-invertly';
 import { args } from '../stores';
 import { ArgumentsDataType as DataType, ArgumentsType } from '../types';
 

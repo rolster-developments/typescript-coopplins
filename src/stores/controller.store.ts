@@ -1,4 +1,4 @@
-import { Optional } from '@xofttion/utils';
+import { Optional } from '@rolster/typescript-utils';
 import { ControllerConfig } from '../types';
 
 type ControllerMap = Map<Function, ControllerConfig>;

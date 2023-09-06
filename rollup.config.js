@@ -18,7 +18,14 @@ export default {
       inlineDynamicImports: true
     }
   ],
-  external: ['@rolster/typescript-utils'],
+  external: [
+    '@rolster/typescript-invertly',
+    '@rolster/typescript-utils',
+    'dotenv',
+    'express',
+    'express-validator',
+    'reflect-metadata'
+  ],
   plugins: [
     resolve(),
     commonjs(),

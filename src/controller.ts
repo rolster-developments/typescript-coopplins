@@ -1,4 +1,4 @@
-import factoryInject from '@xofttion/dependency-injection';
+import createFromInvertly from '@rolster/typescript-invertly';
 import express, { Express, Request, Response, Router } from 'express';
 import {
   createHttpArguments,
@@ -28,7 +28,7 @@ type ControllerCallback = {
 export function registerControllers({ collection, error, server }: Config): void {
   for (const token of collection) {
     controllers.fetch(token).present(({ basePath, middlewares }) => {
-      const controller = factoryInject<ControllerType>({ config: { token } });
+      const controller = createFromInvertly<ControllerType>({ config: { token } });
       const router = createRouterController(middlewares);
 
       const configs = routes.fetch(token);

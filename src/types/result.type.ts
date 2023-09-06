@@ -1,4 +1,4 @@
-import { Sealed } from '@xofttion/utils';
+import { Sealed } from '@rolster/typescript-utils';
 
 export class Result<S, F, V = any> extends Sealed<
   V,

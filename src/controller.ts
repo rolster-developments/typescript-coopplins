@@ -25,10 +25,16 @@ type ControllerCallback = {
   error?: (ex: unknown) => void;
 };
 
-export function registerControllers({ collection, error, server }: Config): void {
+export function registerControllers({
+  collection,
+  error,
+  server
+}: Config): void {
   for (const token of collection) {
     controllers.fetch(token).present(({ basePath, middlewares }) => {
-      const controller = createFromInvertly<ControllerType>({ config: { token } });
+      const controller = createFromInvertly<ControllerType>({
+        config: { token }
+      });
       const router = createRouterController(middlewares);
 
       const configs = routes.fetch(token);

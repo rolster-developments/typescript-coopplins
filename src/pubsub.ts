@@ -19,7 +19,10 @@ interface Emitter<T = unknown> {
 
 const events: Record<string, Set<Subscription>> = {};
 
-export function registerPubSub(event: string, subscription: Subscription): void {
+export function registerPubSub(
+  event: string,
+  subscription: Subscription
+): void {
   if (!events[event]) {
     events[event] = new Set();
   }

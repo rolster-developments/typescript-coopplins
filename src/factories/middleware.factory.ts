@@ -4,7 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 import { middlewares } from '../stores';
 import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
 
-export function createMiddlewares(collection: MiddlewareToken[]): MiddlewareRoute[] {
+export function createMiddlewares(
+  collection: MiddlewareToken[]
+): MiddlewareRoute[] {
   return collection.reduce((middlewares: MiddlewareRoute[], middleware) => {
     createMiddleware(middleware).present((call) => middlewares.push(call));
 
@@ -12,7 +14,9 @@ export function createMiddlewares(collection: MiddlewareToken[]): MiddlewareRout
   }, []);
 }
 
-export function createMiddleware(token: MiddlewareToken): Optional<MiddlewareRoute> {
+export function createMiddleware(
+  token: MiddlewareToken
+): Optional<MiddlewareRoute> {
   if (typeof token !== 'function') {
     return Optional.of(token);
   }

@@ -6,7 +6,10 @@ const message = 'An error occurred during the execution of the process';
 const errorCode = HttpCode.InternalServerError;
 
 type FnWrap = (req: Request, res: Response) => Promise<any>;
-type FnCallback = (req: Request, res: Response) => Promise<ResultServer | any> | any;
+type FnCallback = (
+  req: Request,
+  res: Response
+) => Promise<ResultServer | any> | any;
 type FnError = (error: unknown) => void;
 
 type Settings = {
@@ -16,7 +19,10 @@ type Settings = {
   response: Response;
 };
 
-export function createWrap(callback: FnCallback, handleError?: FnError): FnWrap {
+export function createWrap(
+  callback: FnCallback,
+  handleError?: FnError
+): FnWrap {
   return (request: Request, response: Response) =>
     wrap({ request, response, handleError, callback });
 }

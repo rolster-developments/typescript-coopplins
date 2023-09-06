@@ -46,11 +46,19 @@ export function Header(key: string, dataType?: DataType): Decorator {
 }
 
 export function HeaderBool(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Header, dataType: 'boolean', key });
+  return createParameter({
+    type: ArgumentsType.Header,
+    dataType: 'boolean',
+    key
+  });
 }
 
 export function HeaderNumber(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Header, dataType: 'number', key });
+  return createParameter({
+    type: ArgumentsType.Header,
+    dataType: 'number',
+    key
+  });
 }
 
 export function Path(key: string, dataType?: DataType): Decorator {
@@ -58,7 +66,11 @@ export function Path(key: string, dataType?: DataType): Decorator {
 }
 
 export function PathBool(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Path, dataType: 'boolean', key });
+  return createParameter({
+    type: ArgumentsType.Path,
+    dataType: 'boolean',
+    key
+  });
 }
 
 export function PathNumber(key: string): Decorator {
@@ -70,9 +82,17 @@ export function Query(key: string, dataType?: DataType): Decorator {
 }
 
 export function QueryBool(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Query, dataType: 'boolean', key });
+  return createParameter({
+    type: ArgumentsType.Query,
+    dataType: 'boolean',
+    key
+  });
 }
 
 export function QueryNumber(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Query, dataType: 'number', key });
+  return createParameter({
+    type: ArgumentsType.Query,
+    dataType: 'number',
+    key
+  });
 }

@@ -27,10 +27,14 @@ export function createHttpArguments(config: ArgumentConfig): any[] {
         values.push(key ? request.body[key] : request.body);
         break;
       case ArgumentsType.Header:
-        values.push(key ? fetchValue(request.headers[key], dataType) : undefined);
+        values.push(
+          key ? fetchValue(request.headers[key], dataType) : undefined
+        );
         break;
       case ArgumentsType.Path:
-        values.push(key ? fetchValue(request.params[key], dataType) : undefined);
+        values.push(
+          key ? fetchValue(request.params[key], dataType) : undefined
+        );
         break;
       case ArgumentsType.Query:
         values.push(key ? fetchValue(request.query[key], dataType) : undefined);

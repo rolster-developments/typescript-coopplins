@@ -1,6 +1,6 @@
 {
   "name": "@rolster/typescript-coopplins",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Package that contains a working environment to develop web applications and API's.",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -15,7 +15,8 @@
     }
   ],
   "files": [
-    "dist/"
+    "dist/",
+    "types/"
   ],
   "exports": {
     ".": {

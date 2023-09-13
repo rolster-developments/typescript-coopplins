@@ -22,18 +22,20 @@ const external = [
   'reflect-metadata'
 ];
 
-export default [
-  {
-    input: 'dist/esm/index.js',
+function createConfig(alias) {
+  const finalPath = alias ? `${alias}/` : '';
+
+  return {
+    input: `dist/esm/${finalPath}index.js`,
     output: [
       {
-        file: 'dist/es/index.js',
+        file: `dist/es/${finalPath}index.js`,
         format: 'es',
         sourcemap: true,
         inlineDynamicImports: true
       },
       {
-        file: 'dist/cjs/index.js',
+        file: `dist/cjs/${finalPath}index.js`,
         format: 'cjs',
         sourcemap: true,
         inlineDynamicImports: true
@@ -41,24 +43,7 @@ export default [
     ],
     external,
     plugins
-  },
-  {
-    input: 'dist/esm/types/index.js',
-    output: [
-      {
-        file: 'dist/es/types/index.js',
-        format: 'es',
-        sourcemap: true,
-        inlineDynamicImports: true
-      },
-      {
-        file: 'dist/cjs/types/index.js',
-        format: 'cjs',
-        sourcemap: true,
-        inlineDynamicImports: true
-      }
-    ],
-    external,
-    plugins
-  }
-];
+  };
+}
+
+export default [createConfig(''), createConfig('types')];

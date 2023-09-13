@@ -1,0 +1,8 @@
+{
+  "name": "@rolster/typescript-coopplins/types",
+  "types": "../dist/esm/types/index.d.ts",
+  "main": "../dist/cjs/types/index.js",
+  "module": "../dist/esm/types/index.js",
+  "unpkg": "../dist/es/types/index.js",
+  "sideEffects": false
+}

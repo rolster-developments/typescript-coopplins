@@ -1,9 +1,9 @@
 {
   "name": "@rolster/typescript-coopplins",
-  "version": "4.1.2",
+  "version": "4.1.4",
   "description": "Package that contains a working environment to develop web applications and API's.",
-  "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.js",
   "unpkg": "./dist/es/index.js",
   "types": "./dist/esm/index.d.ts",
   "license": "MIT",
@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@rolster/typescript-invertly": "^4.0.0",
-    "@rolster/typescript-utils": "^4.0.1",
+    "@rolster/typescript-utils": "^4.0.4",
     "dotenv": "^16.0.2",
     "express": "^4.18.2",
     "express-validator": "^6.14.3",

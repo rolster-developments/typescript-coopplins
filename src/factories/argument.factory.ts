@@ -1,16 +1,31 @@
-import createFromInvertly from '@rolster/typescript-invertly';
-import { parseBoolean } from '@rolster/typescript-utils';
+import { parseBoolean } from '@rolster/helpers-advanced';
+import createFromInvertly from '@rolster/invertly';
 import { Request } from 'express';
 import { args } from '../stores';
 import { ArgumentsDataType, ArgumentsType, fetchContext } from '../types';
 
-type ArgumentConfig = {
+interface ArgumentConfig {
   key: string | symbol;
   object: any;
   request: Request;
+}
+
+const resolveValue = (value: any, dataType?: ArgumentsDataType): any => {
+  if (!value || !dataType) {
+    return value;
+  }
+
+  switch (dataType) {
+    case 'number':
+      return new Number(value);
+    case 'boolean':
+      return parseBoolean(value);
+    default:
+      return value;
+  }
 };
 
-export function createHttpArguments(config: ArgumentConfig): any[] {
+export const createHttpArguments = (config: ArgumentConfig): any[] => {
   const {
     key,
     object: { constructor },
@@ -27,44 +42,24 @@ export function createHttpArguments(config: ArgumentConfig): any[] {
         values.push(key ? request.body[key] : request.body);
         break;
       case ArgumentsType.Header:
-        values.push(
-          key ? fetchValue(request.headers[key], dataType) : undefined
-        );
+        values.push(key && resolveValue(request.headers[key], dataType));
         break;
       case ArgumentsType.Path:
-        values.push(
-          key ? fetchValue(request.params[key], dataType) : undefined
-        );
+        values.push(key && resolveValue(request.params[key], dataType));
         break;
       case ArgumentsType.Query:
-        values.push(key ? fetchValue(request.query[key], dataType) : undefined);
+        values.push(key && resolveValue(request.query[key], dataType));
         break;
       case ArgumentsType.Inject:
         values.push(
-          token
-            ? createFromInvertly({
-                config: { token, context: fetchContext(request) }
-              })
-            : undefined
+          token &&
+            createFromInvertly({
+              config: { token, context: fetchContext(request) }
+            })
         );
         break;
     }
   }
 
   return values;
-}
-
-function fetchValue(value: any, dataType?: ArgumentsDataType): any {
-  if (!value || !dataType) {
-    return value;
-  }
-
-  switch (dataType) {
-    case 'number':
-      return new Number(value);
-    case 'boolean':
-      return parseBoolean(value);
-    default:
-      return value;
-  }
-}
+};

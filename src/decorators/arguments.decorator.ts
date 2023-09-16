@@ -1,18 +1,20 @@
-import { InjectableToken } from '@rolster/typescript-invertly';
+import { InjectableToken } from '@rolster/invertly';
 import { args } from '../stores';
 import { ArgumentsDataType as DataType, ArgumentsType } from '../types';
 
 type Decorator = ParameterDecorator;
 
-type Config = {
+interface ParameterProps {
   type: ArgumentsType;
-  key?: string;
   dataType?: DataType;
-};
+  key?: string;
+}
 
-function createParameter({ type, key, dataType }: Config): Decorator {
+const createParameter = (props: ParameterProps): Decorator => {
   return ({ constructor }, name, index) => {
     if (name) {
+      const { type, key, dataType } = props;
+
       args.push(constructor, {
         dataType: dataType || 'string',
         index,
@@ -22,9 +24,9 @@ function createParameter({ type, key, dataType }: Config): Decorator {
       });
     }
   };
-}
+};
 
-export function Inject(inject: InjectableToken): Decorator {
+export const Inject = (inject: InjectableToken): Decorator => {
   return ({ constructor }, name, index) => {
     if (name) {
       args.push(constructor, {
@@ -35,64 +37,44 @@ export function Inject(inject: InjectableToken): Decorator {
       });
     }
   };
-}
+};
 
-export function Body(key?: string): Decorator {
-  return createParameter({ type: ArgumentsType.Body, key });
-}
+export const Body = (key?: string): Decorator => {
+  return createParameter({ key, type: ArgumentsType.Body });
+};
 
-export function Header(key: string, dataType?: DataType): Decorator {
-  return createParameter({ type: ArgumentsType.Header, dataType, key });
-}
+export const Header = (key: string, dataType?: DataType): Decorator => {
+  return createParameter({ dataType, key, type: ArgumentsType.Header });
+};
 
-export function HeaderBool(key: string): Decorator {
-  return createParameter({
-    type: ArgumentsType.Header,
-    dataType: 'boolean',
-    key
-  });
-}
+export const HeaderBool = (key: string): Decorator => {
+  return Header(key, 'boolean');
+};
 
-export function HeaderNumber(key: string): Decorator {
-  return createParameter({
-    type: ArgumentsType.Header,
-    dataType: 'number',
-    key
-  });
-}
+export const HeaderNumber = (key: string): Decorator => {
+  return Header(key, 'number');
+};
 
-export function Path(key: string, dataType?: DataType): Decorator {
-  return createParameter({ type: ArgumentsType.Path, dataType, key });
-}
+export const Path = (key: string, dataType?: DataType): Decorator => {
+  return createParameter({ dataType, key, type: ArgumentsType.Path });
+};
 
-export function PathBool(key: string): Decorator {
-  return createParameter({
-    type: ArgumentsType.Path,
-    dataType: 'boolean',
-    key
-  });
-}
+export const PathBool = (key: string): Decorator => {
+  return Path(key, 'boolean');
+};
 
-export function PathNumber(key: string): Decorator {
-  return createParameter({ type: ArgumentsType.Path, dataType: 'number', key });
-}
+export const PathNumber = (key: string): Decorator => {
+  return Path(key, 'number');
+};
 
-export function Query(key: string, dataType?: DataType): Decorator {
-  return createParameter({ type: ArgumentsType.Query, dataType, key });
-}
+export const Query = (key: string, dataType?: DataType): Decorator => {
+  return createParameter({ dataType, key, type: ArgumentsType.Query });
+};
 
-export function QueryBool(key: string): Decorator {
-  return createParameter({
-    type: ArgumentsType.Query,
-    dataType: 'boolean',
-    key
-  });
-}
+export const QueryBool = (key: string): Decorator => {
+  return Query(key, 'boolean');
+};
 
-export function QueryNumber(key: string): Decorator {
-  return createParameter({
-    type: ArgumentsType.Query,
-    dataType: 'number',
-    key
-  });
-}
+export const QueryNumber = (key: string): Decorator => {
+  return Query(key, 'number');
+};

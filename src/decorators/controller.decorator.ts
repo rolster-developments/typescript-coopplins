@@ -1,11 +1,13 @@
-import { registerInjectable } from '@rolster/typescript-invertly';
+import { registerInjectable } from '@rolster/invertly';
 import { controllers } from '../stores';
 import { MiddlewareToken } from '../types';
 
-export function Controller(
+type Tokens = MiddlewareToken[];
+
+export const Controller = (
   basePath = '/',
-  middlewares: MiddlewareToken[] = []
-): ClassDecorator {
+  middlewares: Tokens = []
+): ClassDecorator => {
   return (token) => {
     controllers.push(token, { basePath, middlewares });
 
@@ -17,4 +19,4 @@ export function Controller(
       }
     });
   };
-}
+};

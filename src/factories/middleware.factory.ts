@@ -1,22 +1,26 @@
-import createFromInvertly from '@rolster/typescript-invertly';
-import { Optional } from '@rolster/typescript-utils';
+import { Optional } from '@rolster/helpers-advanced';
+import createFromInvertly from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
 import { middlewares } from '../stores';
 import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
 
-export function createMiddlewares(
-  collection: MiddlewareToken[]
-): MiddlewareRoute[] {
-  return collection.reduce((middlewares: MiddlewareRoute[], middleware) => {
+const isMiddleware = (middleware: any): middleware is OnMiddleware => {
+  return typeof middleware['execute'] === 'function';
+};
+
+export const createMiddlewares = (
+  tokens: MiddlewareToken[]
+): MiddlewareRoute[] => {
+  return tokens.reduce((middlewares, middleware) => {
     createMiddleware(middleware).present((call) => middlewares.push(call));
 
     return middlewares;
-  }, []);
-}
+  }, [] as MiddlewareRoute[]);
+};
 
-export function createMiddleware(
+export const createMiddleware = (
   token: MiddlewareToken
-): Optional<MiddlewareRoute> {
+): Optional<MiddlewareRoute> => {
   if (typeof token !== 'function') {
     return Optional.of(token);
   }
@@ -34,8 +38,4 @@ export function createMiddleware(
         return middleware.execute(req, res, next);
       })
     : Optional.empty();
-}
-
-function isMiddleware(middleware: any): middleware is OnMiddleware {
-  return typeof middleware['execute'] === 'function';
-}
+};

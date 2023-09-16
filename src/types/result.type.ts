@@ -1,4 +1,4 @@
-import { Sealed } from '@rolster/typescript-utils';
+import { Sealed } from '@rolster/helpers-advanced';
 
 export class Result<S, F, V = any> extends Sealed<
   V,

@@ -1,12 +1,12 @@
-import { RouteConfig } from '../types';
+import { RouteProps } from '../types';
 
-type RouteIndex = Map<string, RouteConfig>;
+type RouteIndex = Map<string, RouteProps>;
 type ControllerIndex = Map<Function, RouteIndex>;
 
 class RouteStore {
   private collection: ControllerIndex = new Map();
 
-  public push(controller: Function, config: RouteConfig): void {
+  public push(controller: Function, config: RouteProps): void {
     const indexs = this.fetchRouteIndex(controller);
 
     const { http, path } = config;
@@ -14,7 +14,7 @@ class RouteStore {
     indexs.set(`${http}:${path}`, config);
   }
 
-  public fetch(controller: Function): RouteConfig[] {
+  public fetch(controller: Function): RouteProps[] {
     const indexs = this.fetchRouteIndex(controller);
 
     return Array.from(indexs.values());
@@ -27,7 +27,7 @@ class RouteStore {
       return current;
     }
 
-    const indexs = new Map<string, RouteConfig>();
+    const indexs = new Map<string, RouteProps>();
 
     this.collection.set(controller, indexs);
 

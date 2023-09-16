@@ -1,10 +1,10 @@
-import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
 const plugins = [
-  resolve(),
   commonjs(),
+  resolve(),
   typescript({
     tsconfig: './tsconfig.json',
     declaration: true,
@@ -14,36 +14,33 @@ const plugins = [
 ];
 
 const external = [
-  '@rolster/typescript-invertly',
-  '@rolster/typescript-utils',
+  '@rolster/helpers-advanced',
+  '@rolster/invertly',
   'dotenv',
   'express',
-  'express-validator',
   'reflect-metadata'
 ];
 
-function configuration(alias) {
-  const filename = alias ? `${alias}/index.js` : 'index.js';
-
+const rollupTs = (alias) => {
   return {
-    external,
-    plugins,
-    input: `dist/esm/${filename}`,
+    input: `dist/esm/${alias}.js`,
     output: [
       {
-        file: `dist/es/${filename}`,
-        format: 'es',
+        file: `dist/cjs/${alias}.js`,
+        format: 'cjs',
         sourcemap: true,
         inlineDynamicImports: true
       },
       {
-        file: `dist/cjs/${filename}`,
-        format: 'cjs',
+        file: `dist/es/${alias}.js`,
+        format: 'es',
         sourcemap: true,
         inlineDynamicImports: true
       }
-    ]
+    ],
+    external,
+    plugins
   };
-}
+};
 
-export default [configuration(''), configuration('types')];
+export default [rollupTs('index')];

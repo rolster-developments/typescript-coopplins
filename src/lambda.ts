@@ -1,10 +1,10 @@
-import createFromInvertly from '@rolster/typescript-invertly';
+import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response } from 'express';
 import {
   createHttpArguments,
-  createHttpRoute,
+  createRoute,
   createMiddlewares,
-  createWrap
+  createAPIService
 } from './factories';
 import { lambdas } from './stores';
 import { fetchContext } from './types';
@@ -27,7 +27,7 @@ export function registerLambdas({ collection, error, server }: Config): void {
     lambdas.fetch(token).present(({ http, middlewares, path }) => {
       const router = express.Router({ mergeParams: true });
 
-      const httpLambda = createHttpRoute(router, http);
+      const httpLambda = createRoute(router, http);
       const middleraresLambda = createMiddlewares(middlewares);
       const callLambda = createCallback({ token, error });
 
@@ -41,7 +41,7 @@ export function registerLambdas({ collection, error, server }: Config): void {
 function createCallback(config: LambdaCallback): RouteCallback {
   const { token, error } = config;
 
-  return createWrap((request: Request, response: Response) => {
+  return createAPIService((request: Request, response: Response) => {
     const object = createFromInvertly<any>({
       config: { token, context: fetchContext(request) }
     });

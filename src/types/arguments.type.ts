@@ -1,13 +1,13 @@
-import { InjectableToken } from '@rolster/typescript-invertly';
+import { InjectableToken } from '@rolster/invertly';
 
 export type ArgumentsDataType = 'string' | 'number' | 'boolean' | 'object';
 
 export enum ArgumentsType {
-  Body = 1,
-  Header = 2,
-  Path = 3,
-  Query = 4,
-  Inject = 9
+  Body = 'body',
+  Header = 'header',
+  Path = 'path',
+  Query = 'query',
+  Inject = 'inject'
 }
 
 export type ArgumentsConfig = {

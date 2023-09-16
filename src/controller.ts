@@ -1,58 +1,31 @@
-import createFromInvertly from '@rolster/typescript-invertly';
+import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response, Router } from 'express';
 import {
   createHttpArguments,
-  createHttpRoute,
+  createRoute,
   createMiddleware,
   createMiddlewares,
-  createWrap
+  createAPIService
 } from './factories';
 import { controllers, routes } from './stores';
 import { MiddlewareToken } from './types';
 
-type ControllerType = { [key: string | symbol]: Function };
-type RouteCallback = (request: Request, response: Response) => Promise<any>;
+type Controller = Record<string | symbol, Function>;
+type FnResolver = (request: Request, response: Response) => Promise<any>;
 
-type Config = {
+interface ControllersProps {
   collection: Function[];
   server: Express;
-  error?: (ex: unknown) => void;
-};
-
-type ControllerCallback = {
-  controller: ControllerType;
-  key: string | symbol;
-  error?: (ex: unknown) => void;
-};
-
-export function registerControllers({
-  collection,
-  error,
-  server
-}: Config): void {
-  for (const token of collection) {
-    controllers.fetch(token).present(({ basePath, middlewares }) => {
-      const controller = createFromInvertly<ControllerType>({
-        config: { token }
-      });
-      const router = createRouterController(middlewares);
-
-      const configs = routes.fetch(token);
-
-      for (const { http, middlewares, key, path } of configs) {
-        const middlewaresRoute = createMiddlewares(middlewares);
-        const httpRoute = createHttpRoute(router, http);
-        const callRoute = createCallback({ controller, key, error });
-
-        httpRoute(path, [...middlewaresRoute, callRoute]);
-      }
-
-      server.use(basePath, router);
-    });
-  }
+  error?: (err: unknown) => void;
 }
 
-function createRouterController(middlewares: MiddlewareToken[]): Router {
+interface ControllerProps {
+  controller: Controller;
+  key: string | symbol;
+  error?: (ex: unknown) => void;
+}
+
+const createRouter = (middlewares: MiddlewareToken[]): Router => {
   const router = express.Router({ mergeParams: true });
 
   for (const middleware of middlewares) {
@@ -60,16 +33,41 @@ function createRouterController(middlewares: MiddlewareToken[]): Router {
   }
 
   return router;
-}
+};
 
-function createCallback(config: ControllerCallback): RouteCallback {
-  const { controller, error, key } = config;
+const createResolver = (props: ControllerProps): FnResolver => {
+  const { controller, error, key } = props;
 
-  return createWrap((request: Request, response: Response) => {
+  return createAPIService((request: Request, response: Response) => {
     const resolver = controller[key].bind(controller);
 
     const args = createHttpArguments({ object: controller, key, request });
 
     return resolver(...[...args, request, response]);
   }, error);
-}
+};
+
+export const registerControllers = (props: ControllersProps): void => {
+  const { collection, error, server } = props;
+
+  for (const token of collection) {
+    controllers.fetch(token).present(({ basePath, middlewares }) => {
+      const controller = createFromInvertly<Controller>({ config: { token } });
+
+      const router = createRouter(middlewares);
+      const configs = routes.fetch(token);
+
+      for (const { http, middlewares, key, path } of configs) {
+        const routeMiddlewares = createMiddlewares(middlewares);
+
+        const route = createRoute(router, http);
+
+        const resolver = createResolver({ controller, key, error });
+
+        route(path, [...routeMiddlewares, resolver]);
+      }
+
+      server.use(basePath, router);
+    });
+  }
+};

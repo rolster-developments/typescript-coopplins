@@ -1,16 +1,16 @@
-# Rolster Typescript Coopplins
+# Rolster Coopplins Server
 
 Package that contains a working environment to develop web applications and API's.
 
 ## Installation
 
 ```
-npm i @rolster/typescript-coopplins
+npm i @rolster/coopplins-server
 ```
 
 ## Configuration
 
-You must install the `@rolster/typescript-types` to define package data types, which are configured by adding them to the `files` property of the `tsconfig.json` file.
+You must install the `@rolster/types` to define package data types, which are configured by adding them to the `files` property of the `tsconfig.json` file.
 
 ```json
 {
@@ -18,7 +18,7 @@ You must install the `@rolster/typescript-types` to define package data types, w
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "files": ["node_modules/@rolster/typescript-types/index.d.ts"]
+  "files": ["node_modules/@rolster/types/index.d.ts"]
 }
 ```
 

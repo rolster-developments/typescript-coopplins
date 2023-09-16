@@ -1,25 +1,23 @@
-import { parse } from '@rolster/typescript-utils';
+import { parse } from '@rolster/helpers-advanced';
 import dotenv, { DotenvConfigOptions } from 'dotenv';
-import express, { Express, NextFunction, Request, Response } from 'express';
+import express, { Express } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
-import { validationResult } from 'express-validator';
 import { registerControllers } from './controller';
 import { registerLambdas } from './lambda';
-import { HttpCode } from './types';
 
 type Options = Partial<DotenvConfigOptions>;
 
-type CoopplinsConfig = Partial<{
+interface CoopplinsProps {
+  controllers?: Function[];
+  handlers?: RequestHandler[];
+  lambdas?: Function[];
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
-  controllers?: Function[];
   handleError?: (ex: unknown) => void;
-  handlers: RequestHandler[];
-  lambdas?: Function[];
-}>;
+}
 
 class Coopplins {
-  constructor(private config: CoopplinsConfig) {}
+  constructor(private config: Partial<CoopplinsProps>) {}
 
   public async start(port: number): Promise<void> {
     const { afterAll, beforeAll, controllers, handlers, handleError, lambdas } =
@@ -61,24 +59,12 @@ class Coopplins {
   }
 }
 
-export function environment<T = string>(key: string, options?: Options): T {
+export const environment = <T = string>(key: string, options?: Options): T => {
   dotenv.config(options);
 
   return parse<T>(String(process.env[key]));
-}
+};
 
-export function validator(): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction): any => {
-    const errors = validationResult(req);
-
-    if (errors.isEmpty()) {
-      next();
-    } else {
-      return res.status(HttpCode.BadRequest).send(errors.array());
-    }
-  };
-}
-
-export function coopplins(config: CoopplinsConfig): Coopplins {
-  return new Coopplins(config);
-}
+export const coopplins = (props: Partial<CoopplinsProps>): Coopplins => {
+  return new Coopplins(props);
+};

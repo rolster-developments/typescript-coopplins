@@ -1,4 +1,4 @@
-import { Context } from '@rolster/typescript-invertly';
+import { Context } from '@rolster/invertly';
 
 const KEY = 'rolsterContext';
 

@@ -9,10 +9,10 @@ export enum HttpCode {
 }
 
 export enum Http {
-  Post = 1,
-  Get = 2,
-  Put = 3,
-  Delete = 4,
-  Patch = 5,
-  Options = 6
+  Post = 'post',
+  Get = 'get',
+  Put = 'put',
+  Delete = 'delete',
+  Patch = 'patch',
+  Options = 'options'
 }

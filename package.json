@@ -1,6 +1,6 @@
 {
   "name": "@rolster/coopplins-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Package that contains a working environment to develop web applications and API's.",
   "module": "./dist/esm/index.js",
   "main": "./dist/cjs/index.js",
@@ -15,8 +15,23 @@
     }
   ],
   "files": [
-    "dist/"
+    "dist/",
+    "types/"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "node": "./dist/cjs/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/esm/index.js"
+    },
+    "./types": {
+      "types": "./dist/esm/types/index.d.ts",
+      "node": "./dist/cjs/types/index.js",
+      "require": "./dist/cjs/types/index.js",
+      "default": "./dist/esm/types/index.js"
+    }
+  },
   "scripts": {
     "prettier": "prettier . --write",
     "clean": "rimraf ./dist",

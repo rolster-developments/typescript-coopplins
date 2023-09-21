@@ -43,4 +43,4 @@ const rollupTs = (alias) => {
   };
 };
 
-export default [rollupTs('index')];
+export default [rollupTs('index'), rollupTs('types/index')];

@@ -6,41 +6,41 @@ const plugins = [
   commonjs(),
   resolve(),
   typescript({
-    tsconfig: './tsconfig.json',
+    tsconfig: './tsconfig.app.json',
     declaration: true,
     declarationDir: 'dist',
     include: ['node_modules/@rolster/typescript-types/index.d.ts']
   })
 ];
 
-const external = [
-  '@rolster/helpers-advanced',
-  '@rolster/invertly',
-  'dotenv',
-  'express',
-  'reflect-metadata'
-];
-
-const rollupTs = (alias) => {
+const rollupTs = (file) => {
   return {
-    input: `dist/esm/${alias}.js`,
+    input: `dist/esm/${file}.js`,
     output: [
       {
-        file: `dist/cjs/${alias}.js`,
+        file: `dist/cjs/${file}.js`,
         format: 'cjs',
         sourcemap: true,
         inlineDynamicImports: true
       },
       {
-        file: `dist/es/${alias}.js`,
+        file: `dist/es/${file}.js`,
         format: 'es',
         sourcemap: true,
         inlineDynamicImports: true
       }
     ],
-    external,
+    external: [
+      '@rolster/helpers-advanced',
+      '@rolster/invertly',
+      'dotenv',
+      'express',
+      'reflect-metadata'
+    ],
     plugins
   };
 };
 
-export default [rollupTs('index'), rollupTs('types/index')];
+const exports = ['index', 'types/index'];
+
+export default [...exports.map((file) => rollupTs(file))];

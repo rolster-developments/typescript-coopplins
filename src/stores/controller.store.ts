@@ -1,4 +1,4 @@
-import { Optional } from '@rolster/helpers-advanced';
+import { Optional } from '@rolster/commons';
 import { ControllerConfig } from '../types';
 
 type ControllerMap = Map<Function, ControllerConfig>;

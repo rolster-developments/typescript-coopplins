@@ -1,4 +1,4 @@
-import { Sealed } from '@rolster/helpers-advanced';
+import { Sealed } from '@rolster/commons';
 
 export class Result<S, F, V = any> extends Sealed<
   V,

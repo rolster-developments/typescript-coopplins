@@ -1,4 +1,4 @@
-import { Optional } from '@rolster/helpers-advanced';
+import { Optional } from '@rolster/commons';
 import { LambdaProps } from '../types';
 
 type LambdaMap = Map<Function, LambdaProps>;

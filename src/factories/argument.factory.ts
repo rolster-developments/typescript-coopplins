@@ -1,4 +1,4 @@
-import { parseBoolean } from '@rolster/helpers-advanced';
+import { parseBoolean } from '@rolster/commons';
 import createFromInvertly from '@rolster/invertly';
 import { Request } from 'express';
 import { args } from '../stores';

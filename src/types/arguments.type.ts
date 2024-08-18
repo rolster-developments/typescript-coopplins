@@ -1,14 +1,7 @@
 import { InjectableToken } from '@rolster/invertly';
+import { ArgumentsType } from '../enums';
 
 export type ArgumentsDataType = 'string' | 'number' | 'boolean' | 'object';
-
-export enum ArgumentsType {
-  Body = 'body',
-  Header = 'header',
-  Path = 'path',
-  Query = 'query',
-  Inject = 'inject'
-}
 
 export type ArgumentsConfig = {
   index: number;

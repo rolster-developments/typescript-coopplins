@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { Http } from '../types';
+import { HttpMethod } from '../enums';
 
-export const createRoute = (router: Router, http: Http): Function => {
+export function createRoute(router: Router, http: HttpMethod): Function {
   return router[http].bind(router);
-};
+}

@@ -1,8 +1,8 @@
-import { Http } from './http.type';
+import { HttpMethod } from '../enums';
 import { MiddlewareToken } from './middleware.type';
 
-export type RouteProps = {
-  http: Http;
+export type RouteOptions = {
+  http: HttpMethod;
   key: string | symbol;
   middlewares: MiddlewareToken[];
   path: string;

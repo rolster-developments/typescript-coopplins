@@ -1,12 +1,13 @@
 import { registerInjectable } from '@rolster/invertly';
-import { lambdas } from '../stores';
-import { Http, LambdaProps, MiddlewareToken } from '../types';
+import { HttpMethod } from '../enums';
+import { lambdasStore } from '../stores';
+import { LambdaOptions, MiddlewareToken } from '../types';
 
 type Tokens = MiddlewareToken[];
 
-const createLambda = (props: LambdaProps): ClassDecorator => {
+function createLambda(props: LambdaOptions): ClassDecorator {
   return (token) => {
-    lambdas.push(token, props);
+    lambdasStore.push(token, props);
 
     registerInjectable({
       config: {
@@ -16,46 +17,39 @@ const createLambda = (props: LambdaProps): ClassDecorator => {
       }
     });
   };
-};
+}
 
-export const LambdaPost = (
+export function LambdaPost(
   path = '/',
   middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Post });
-};
+): ClassDecorator {
+  return createLambda({ path, middlewares, http: HttpMethod.Post });
+}
 
-export const LambdaGet = (
+export function LambdaGet(
   path = '/',
   middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Get });
-};
+): ClassDecorator {
+  return createLambda({ path, middlewares, http: HttpMethod.Get });
+}
 
-export const LambdaPut = (
+export function LambdaPut(
   path = '/',
   middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Put });
-};
+): ClassDecorator {
+  return createLambda({ path, middlewares, http: HttpMethod.Put });
+}
 
-export const LambdaDelete = (
+export function LambdaDelete(
   path = '/',
   middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Delete });
-};
+): ClassDecorator {
+  return createLambda({ path, middlewares, http: HttpMethod.Delete });
+}
 
-export const LambdaPatch = (
+export function LambdaPatch(
   path = '/',
   middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Patch });
-};
-
-export const LambdaOptions = (
-  path = '/',
-  middlewares: Tokens = []
-): ClassDecorator => {
-  return createLambda({ path, middlewares, http: Http.Options });
-};
+): ClassDecorator {
+  return createLambda({ path, middlewares, http: HttpMethod.Patch });
+}

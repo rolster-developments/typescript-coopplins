@@ -1,27 +1,28 @@
 import { Request, Response } from 'express';
+import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
-import { HttpCode, Result, ResultServer } from '../types';
+import { Result, ResultServer } from '../types';
 
 const message = 'An error occurred during the execution of the process';
 const errorCode = HttpCode.InternalServerError;
 
-type FnExpress = (req: Request, res: Response) => Promise<any>;
+type Express = (request: Request, response: Response) => Promise<any>;
 
-type FnService = (
+type Service = (
   req: Request,
   res: Response
 ) => Promise<ResultServer | any> | any;
 
-type FnError = (error: unknown) => void;
+type Error = (error: unknown) => void;
 
-interface ServiceProps {
+interface ServiceOptions {
   response: Response;
   request: Request;
-  service: FnService;
-  handleError?: FnError;
+  service: Service;
+  handleError?: Error;
 }
 
-const resolveService = (result: any, response: Response): void => {
+function resolveService(result: any, response: Response): void {
   if (result instanceof Result) {
     result.when({
       success: (data) => {
@@ -34,9 +35,9 @@ const resolveService = (result: any, response: Response): void => {
   } else {
     response.status(HttpCode.Ok).json(result);
   }
-};
+}
 
-const rejectService = (exception: any, props: ServiceProps): void => {
+function rejectService(exception: any, props: ServiceOptions): void {
   const { response, handleError } = props;
 
   if (handleError) {
@@ -50,28 +51,28 @@ const rejectService = (exception: any, props: ServiceProps): void => {
   } else {
     response.status(errorCode).json({ message });
   }
-};
+}
 
-const createService = (props: ServiceProps): Promise<any> => {
-  const { request, response, service } = props;
+function createService(options: ServiceOptions): Promise<any> {
+  const { request, response, service } = options;
 
   const resultService = service(request, response);
 
   if (resultService instanceof Promise) {
     return resultService
       .then((result) => resolveService(result, response))
-      .catch((error) => rejectService(error, props));
+      .catch((error) => rejectService(error, options));
   }
 
   const resultPromise = response.status(HttpCode.Ok).json(resultService);
 
   return Promise.resolve(resultPromise);
-};
+}
 
-export const createAPIService = (
-  service: FnService,
-  handleError?: FnError
-): FnExpress => {
+export function createAPIService(
+  service: Service,
+  handleError?: Error
+): Express {
   return (request: Request, response: Response) => {
     return createService({
       request,
@@ -80,4 +81,4 @@ export const createAPIService = (
       service
     });
   };
-};
+}

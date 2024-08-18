@@ -6,54 +6,61 @@ import {
   createMiddlewares,
   createAPIService
 } from './factories';
-import { lambdas } from './stores';
-import { fetchContext } from './types';
+import { lambdasStore } from './stores';
+import { requestContext } from './types';
 
 type RouteCallback = (request: Request, response: Response) => Promise<any>;
 
-type Config = {
-  collection: Function[];
+interface LambdaOptions {
+  lambdas: Function[];
   server: Express;
   error?: (error: unknown) => void;
-};
+}
 
-type LambdaCallback = {
+interface LambdaCallback {
   token: Function;
   error?: (error: unknown) => void;
-};
-
-export function registerLambdas({ collection, error, server }: Config): void {
-  for (const token of collection) {
-    lambdas.fetch(token).present(({ http, middlewares, path }) => {
-      const router = express.Router({ mergeParams: true });
-
-      const httpLambda = createRoute(router, http);
-      const middleraresLambda = createMiddlewares(middlewares);
-      const callLambda = createCallback({ token, error });
-
-      httpLambda('/', [...middleraresLambda, callLambda]);
-
-      server.use(path, router);
-    });
-  }
 }
 
 function createCallback(config: LambdaCallback): RouteCallback {
   const { token, error } = config;
 
   return createAPIService((request: Request, response: Response) => {
-    const object = createFromInvertly<any>({
-      config: { token, context: fetchContext(request) }
+    const lambda = createFromInvertly<any>({
+      config: {
+        context: requestContext(request),
+        token
+      }
     });
 
-    if (typeof object.execute !== 'function') {
+    if (typeof lambda.execute !== 'function') {
       return Promise.resolve();
     }
 
-    const resolver = object.execute.bind(object);
-
-    const args = createHttpArguments({ object, key: 'execute', request });
+    const resolver = lambda.execute.bind(lambda);
+    const args = createHttpArguments(lambda, 'execute', request);
 
     return resolver(...[...args, request, response]);
   }, error);
+}
+
+export function registerLambdas(options: LambdaOptions): void {
+  const { lambdas, error, server } = options;
+
+  for (const token of lambdas) {
+    lambdasStore.request(token).present((options) => {
+      const { http, middlewares, path } = options;
+
+      const router = express.Router({ mergeParams: true });
+
+      const routeLambda = createRoute(router, http);
+
+      routeLambda('/', [
+        ...createMiddlewares(middlewares),
+        createCallback({ token, error })
+      ]);
+
+      server.use(path, router); // Register in server
+    });
+  }
 }

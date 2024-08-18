@@ -1,24 +1,25 @@
 import { registerInjectable } from '@rolster/invertly';
-import { middlewares } from '../stores';
+import { middlewaresStore } from '../stores';
 
-interface MiddlewareProps {
+interface MiddlewareOptions {
   scopeable: boolean;
   singleton: boolean;
 }
 
-const DEFAULT_PROPS: MiddlewareProps = {
-  scopeable: false,
-  singleton: true
-};
-
-export const Middleware = (props: Partial<MiddlewareProps>): ClassDecorator => {
+export function Middleware(
+  options: Partial<MiddlewareOptions>
+): ClassDecorator {
   return (token) => {
-    middlewares.push(token);
+    middlewaresStore.push(token);
 
-    const { scopeable, singleton } = { ...DEFAULT_PROPS, ...props };
+    const { scopeable, singleton } = {
+      scopeable: false,
+      singleton: true,
+      ...options
+    };
 
     registerInjectable({
       config: { scopeable, singleton, token }
     });
   };
-};
+}

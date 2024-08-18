@@ -10,12 +10,12 @@ class ArgumentStore {
   public push(controller: Function, config: ArgumentsConfig): void {
     const { name: token, index } = config;
 
-    const argsCollection = this.fetch(controller, token);
+    const argsCollection = this.request(controller, token);
 
     argsCollection[index] = config;
   }
 
-  public fetch(controller: Function, token: Token): ArgumentsConfig[] {
+  public request(controller: Function, token: Token): ArgumentsConfig[] {
     const argsIndexs = this.fetchArgumentIndex(controller);
 
     const current = argsIndexs.get(token);
@@ -46,4 +46,4 @@ class ArgumentStore {
   }
 }
 
-export const args = new ArgumentStore();
+export const argsStore = new ArgumentStore();

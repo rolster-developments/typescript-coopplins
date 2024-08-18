@@ -7,7 +7,7 @@ import { registerLambdas } from './lambda';
 
 type Options = Partial<DotenvConfigOptions>;
 
-interface CoopplinsProps {
+interface CoopplinsOptions {
   controllers?: Function[];
   handlers?: RequestHandler[];
   lambdas?: Function[];
@@ -17,11 +17,11 @@ interface CoopplinsProps {
 }
 
 class Coopplins {
-  constructor(private config: Partial<CoopplinsProps>) {}
+  constructor(private options: Partial<CoopplinsOptions>) {}
 
   public async start(port: number): Promise<void> {
     const { afterAll, beforeAll, controllers, handlers, handleError, lambdas } =
-      this.config;
+      this.options;
 
     const server: Express = express();
 
@@ -37,7 +37,7 @@ class Coopplins {
 
     if (controllers) {
       registerControllers({
-        collection: controllers,
+        controllers,
         error: handleError,
         server
       });
@@ -45,7 +45,7 @@ class Coopplins {
 
     if (lambdas) {
       registerLambdas({
-        collection: lambdas,
+        lambdas,
         error: handleError,
         server
       });
@@ -65,6 +65,6 @@ export const environment = <T = string>(key: string, options?: Options): T => {
   return parse<T>(String(process.env[key]));
 };
 
-export const coopplins = (props: Partial<CoopplinsProps>): Coopplins => {
+export const coopplins = (props: Partial<CoopplinsOptions>): Coopplins => {
   return new Coopplins(props);
 };

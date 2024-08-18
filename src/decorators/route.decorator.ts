@@ -1,77 +1,78 @@
-import { routes } from '../stores';
-import { Http, MiddlewareToken } from '../types';
+import { HttpMethod } from '../enums';
+import { routesStore } from '../stores';
+import { MiddlewareToken } from '../types';
 
-interface HttpProps {
-  http: Http;
+interface RouteOptions {
+  http: HttpMethod;
   middlewares: MiddlewareToken[];
   path: string;
 }
 
-type HttpConfig = Omit<HttpProps, 'http' | 'path'>;
-type Config = Partial<HttpConfig>;
+type Options = Omit<RouteOptions, 'http' | 'path'>;
+type HttpOptions = Partial<Options>;
 
-const DEFAULT_CONFIG: HttpConfig = {
+const DEFAULT_CONFIG: Options = {
   middlewares: []
 };
 
-const createRoute = (props: HttpProps): MethodDecorator => {
-  const { http, middlewares, path } = props;
+function createRoute(options: RouteOptions): MethodDecorator {
+  const { http, middlewares, path } = options;
 
   return ({ constructor }, key) => {
-    routes.push(constructor, { http, key, middlewares, path });
+    routesStore.push(constructor, { http, key, middlewares, path });
   };
-};
+}
 
-export const Post = (path = '/', config?: Config): MethodDecorator => {
+export function Post(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Post
+    http: HttpMethod.Post
   });
-};
+}
 
-export const Get = (path = '/', config?: Config): MethodDecorator => {
+export function Get(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Get
+    http: HttpMethod.Get
   });
-};
+}
 
-export const Put = (path = '/', config?: Config): MethodDecorator => {
+export function Put(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Put
+    http: HttpMethod.Put
   });
-};
+}
 
-export const Delete = (path = '/', config?: Config): MethodDecorator => {
+export function Delete(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Delete
+    http: HttpMethod.Delete
   });
-};
+}
 
-export const Patch = (path = '/', config?: Config): MethodDecorator => {
+export function Patch(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Patch
+    http: HttpMethod.Patch
   });
-};
+}
 
-export const Options = (path = '/', config?: Config): MethodDecorator => {
+export function Options(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
     ...DEFAULT_CONFIG,
-    ...config,
+    ...options,
     path,
-    http: Http.Options
+    http: HttpMethod.Options
   });
-};
+}

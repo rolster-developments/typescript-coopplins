@@ -1,7 +1,7 @@
 import { Optional } from '@rolster/commons';
 import createFromInvertly from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
-import { middlewares } from '../stores';
+import { middlewaresStore } from '../stores';
 import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
 
 const isMiddleware = (middleware: any): middleware is OnMiddleware => {
@@ -25,7 +25,7 @@ export const createMiddleware = (
     return Optional.of(token);
   }
 
-  if (!middlewares.has(token)) {
+  if (!middlewaresStore.has(token)) {
     return Optional.of((req: Request, res: Response, next: NextFunction) =>
       token(req, res, next)
     );

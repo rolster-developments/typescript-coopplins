@@ -1,4 +1,4 @@
-import { HttpCode } from './types';
+import { HttpCode } from './enums';
 
 export class CoopplinsError extends Error {
   constructor(

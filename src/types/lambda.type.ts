@@ -1,8 +1,8 @@
-import { Http } from './http.type';
+import { HttpMethod } from '../enums';
 import { MiddlewareToken } from './middleware.type';
 
-export type LambdaProps = {
-  http: Http;
+export interface LambdaOptions {
+  http: HttpMethod;
   middlewares: MiddlewareToken[];
   path: string;
-};
+}

@@ -7,25 +7,25 @@ import {
   createMiddlewares,
   createAPIService
 } from './factories';
-import { controllers, routes } from './stores';
+import { controllersStore, routesStore } from './stores';
 import { MiddlewareToken } from './types';
 
 type Controller = Record<string | symbol, Function>;
-type FnResolver = (request: Request, response: Response) => Promise<any>;
+type Resolver = (request: Request, response: Response) => Promise<any>;
 
-interface ControllersProps {
-  collection: Function[];
+interface ControllersOptions {
+  controllers: Function[];
   server: Express;
   error?: (err: unknown) => void;
 }
 
-interface ControllerProps {
+interface ControllerOptions {
   controller: Controller;
   key: string | symbol;
   error?: (ex: unknown) => void;
 }
 
-const createRouter = (middlewares: MiddlewareToken[]): Router => {
+function createRouter(middlewares: MiddlewareToken[]): Router {
   const router = express.Router({ mergeParams: true });
 
   for (const middleware of middlewares) {
@@ -33,31 +33,33 @@ const createRouter = (middlewares: MiddlewareToken[]): Router => {
   }
 
   return router;
-};
+}
 
-const createResolver = (props: ControllerProps): FnResolver => {
-  const { controller, error, key } = props;
+function createResolver(options: ControllerOptions): Resolver {
+  const { controller, error, key } = options;
 
   return createAPIService((request: Request, response: Response) => {
     const resolver = controller[key].bind(controller);
 
-    const args = createHttpArguments({ object: controller, key, request });
+    const args = createHttpArguments(controller, key, request);
 
     return resolver(...[...args, request, response]);
   }, error);
-};
+}
 
-export const registerControllers = (props: ControllersProps): void => {
-  const { collection, error, server } = props;
+export function registerControllers(options: ControllersOptions): void {
+  const { controllers, error, server } = options;
 
-  for (const token of collection) {
-    controllers.fetch(token).present(({ basePath, middlewares }) => {
+  for (const token of controllers) {
+    controllersStore.request(token).present(({ basePath, middlewares }) => {
       const controller = createFromInvertly<Controller>({ config: { token } });
 
+      const configurations = routesStore.request(token);
       const router = createRouter(middlewares);
-      const configs = routes.fetch(token);
 
-      for (const { http, middlewares, key, path } of configs) {
+      for (const configuration of configurations) {
+        const { http, middlewares, key, path } = configuration;
+
         const routeMiddlewares = createMiddlewares(middlewares);
 
         const route = createRoute(router, http);
@@ -67,7 +69,7 @@ export const registerControllers = (props: ControllersProps): void => {
         route(path, [...routeMiddlewares, resolver]);
       }
 
-      server.use(basePath, router);
+      server.use(basePath, router); // Register in server
     });
   }
-};
+}

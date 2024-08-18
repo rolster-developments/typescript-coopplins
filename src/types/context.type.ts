@@ -2,7 +2,7 @@ import { Context } from '@rolster/invertly';
 
 const KEY = 'rolsterContext';
 
-export function fetchContext(request: any): Undefined<Context> {
+export function requestContext(request: any): Undefined<Context> {
   return request[KEY] instanceof Context ? request[KEY] : undefined;
 }
 
@@ -11,7 +11,7 @@ export function saveContext(request: any, context: Context): void {
 }
 
 export function proxyContext(request: any): Context {
-  const current = fetchContext(request);
+  const current = requestContext(request);
 
   if (current) {
     return current;

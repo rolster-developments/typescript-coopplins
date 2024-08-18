@@ -1,3 +1,11 @@
+export enum ArgumentsType {
+  Body = 'body',
+  Header = 'header',
+  Path = 'path',
+  Query = 'query',
+  Inject = 'inject'
+}
+
 export enum HttpCode {
   Ok = 200,
   BadRequest = 400,
@@ -8,7 +16,7 @@ export enum HttpCode {
   InternalServerError = 500
 }
 
-export enum Http {
+export enum HttpMethod {
   Post = 'post',
   Get = 'get',
   Put = 'put',

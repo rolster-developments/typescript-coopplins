@@ -1,18 +1,16 @@
 import { Optional } from '@rolster/commons';
-import { LambdaProps } from '../types';
-
-type LambdaMap = Map<Function, LambdaProps>;
+import { LambdaOptions } from '../types';
 
 class LambdaStore {
-  private collection: LambdaMap = new Map();
+  private collection: Map<Function, LambdaOptions> = new Map();
 
-  public push(lambda: Function, config: LambdaProps): void {
+  public push(lambda: Function, config: LambdaOptions): void {
     this.collection.set(lambda, config);
   }
 
-  public fetch(lambda: Function): Optional<LambdaProps> {
+  public request(lambda: Function): Optional<LambdaOptions> {
     return Optional.build(this.collection.get(lambda));
   }
 }
 
-export const lambdas = new LambdaStore();
+export const lambdasStore = new LambdaStore();

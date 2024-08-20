@@ -1,13 +1,13 @@
 import { registerInjectable } from '@rolster/invertly';
 import { HttpMethod } from '../enums';
-import { lambdasStore } from '../stores';
+import { registerLambda } from '../stores';
 import { LambdaOptions, MiddlewareToken } from '../types';
 
 type Tokens = MiddlewareToken[];
 
 function createLambda(props: LambdaOptions): ClassDecorator {
   return (token) => {
-    lambdasStore.push(token, props);
+    registerLambda(token, props);
 
     registerInjectable({
       config: {

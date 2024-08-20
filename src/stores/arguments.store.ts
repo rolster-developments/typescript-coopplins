@@ -1,49 +1,63 @@
-import { ArgumentsConfig } from '../types';
+import { ArgumentsOptions } from '../types';
 
 type Token = string | symbol;
-type ArgumentIndex = Map<Token, ArgumentsConfig[]>;
-type ControllerIndex = Map<Function, ArgumentIndex>;
+type ArgumentsMap = Map<Token, ArgumentsOptions[]>;
+type Controllers = Map<Function, ArgumentsMap>;
 
-class ArgumentStore {
-  private collection: ControllerIndex = new Map();
+class Arguments {
+  private controllers: Controllers = new Map();
 
-  public push(controller: Function, config: ArgumentsConfig): void {
-    const { name: token, index } = config;
+  public register(controller: Function, options: ArgumentsOptions): void {
+    const { name: token, index } = options;
 
     const argsCollection = this.request(controller, token);
 
-    argsCollection[index] = config;
+    argsCollection[index] = options;
   }
 
-  public request(controller: Function, token: Token): ArgumentsConfig[] {
-    const argsIndexs = this.fetchArgumentIndex(controller);
+  public request(controller: Function, token: Token): ArgumentsOptions[] {
+    const args = this.requestArgumentsForController(controller);
 
-    const current = argsIndexs.get(token);
+    const currentOptions = args.get(token);
 
-    if (current) {
-      return current;
+    if (currentOptions) {
+      return currentOptions;
     }
 
-    const collection: ArgumentsConfig[] = [];
+    const options: ArgumentsOptions[] = [];
 
-    argsIndexs.set(token, collection);
+    args.set(token, options);
 
-    return collection;
+    return options;
   }
 
-  private fetchArgumentIndex(controller: Function): ArgumentIndex {
-    const current = this.collection.get(controller);
+  private requestArgumentsForController(controller: Function): ArgumentsMap {
+    const currentArguments = this.controllers.get(controller);
 
-    if (current) {
-      return current;
+    if (currentArguments) {
+      return currentArguments;
     }
 
-    const indexs = new Map<Token, ArgumentsConfig[]>();
+    const args = new Map<Token, ArgumentsOptions[]>();
 
-    this.collection.set(controller, indexs);
+    this.controllers.set(controller, args);
 
-    return indexs;
+    return args;
   }
 }
 
-export const argsStore = new ArgumentStore();
+const args = new Arguments();
+
+export function registerArgument(
+  controller: Function,
+  options: ArgumentsOptions
+): void {
+  args.register(controller, options);
+}
+
+export function requestArgument(
+  controller: Function,
+  token: Token
+): ArgumentsOptions[] {
+  return args.request(controller, token);
+}

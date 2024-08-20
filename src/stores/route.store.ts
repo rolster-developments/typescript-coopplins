@@ -1,36 +1,47 @@
 import { RouteOptions } from '../types';
 
-type RouteIndex = Map<string, RouteOptions>;
-type ControllerIndex = Map<Function, RouteIndex>;
+type RoutesMap = Map<string, RouteOptions>;
+type Controllers = Map<Function, RoutesMap>;
 
-class RouteStore {
-  private collection: ControllerIndex = new Map();
+class Routes {
+  private controllers: Controllers = new Map();
 
-  public push(controller: Function, config: RouteOptions): void {
-    const indexs = this.requestRouteIndex(controller);
+  public register(controller: Function, options: RouteOptions): void {
+    const indexs = this.requestRoutesForController(controller);
 
-    const { http, path } = config;
+    const { http, path } = options;
 
-    indexs.set(`${http}:${path}`, config);
+    indexs.set(`${http}:${path}`, options);
   }
 
   public request(controller: Function): RouteOptions[] {
-    return Array.from(this.requestRouteIndex(controller).values());
+    return Array.from(this.requestRoutesForController(controller).values());
   }
 
-  private requestRouteIndex(controller: Function): RouteIndex {
-    const current = this.collection.get(controller);
+  private requestRoutesForController(controller: Function): RoutesMap {
+    const currentRoutes = this.controllers.get(controller);
 
-    if (current) {
-      return current;
+    if (currentRoutes) {
+      return currentRoutes;
     }
 
-    const indexs = new Map<string, RouteOptions>();
+    const routes = new Map<string, RouteOptions>();
 
-    this.collection.set(controller, indexs);
+    this.controllers.set(controller, routes);
 
-    return indexs;
+    return routes;
   }
 }
 
-export const routesStore = new RouteStore();
+const routes = new Routes();
+
+export function registerRoutes(
+  controller: Function,
+  options: RouteOptions
+): void {
+  routes.register(controller, options);
+}
+
+export function requestRoutes(controller: Function): RouteOptions[] {
+  return routes.request(controller);
+}

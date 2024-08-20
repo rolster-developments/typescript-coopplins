@@ -1,4 +1,4 @@
-export enum ArgumentsType {
+export enum Arguments {
   Body = 'body',
   Header = 'header',
   Path = 'path',

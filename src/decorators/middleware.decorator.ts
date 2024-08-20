@@ -1,5 +1,5 @@
 import { registerInjectable } from '@rolster/invertly';
-import { middlewaresStore } from '../stores';
+import { registerMiddleware } from '../stores';
 
 interface MiddlewareOptions {
   scopeable: boolean;
@@ -10,7 +10,7 @@ export function Middleware(
   options: Partial<MiddlewareOptions>
 ): ClassDecorator {
   return (token) => {
-    middlewaresStore.push(token);
+    registerMiddleware(token);
 
     const { scopeable, singleton } = {
       scopeable: false,

@@ -1,11 +1,11 @@
 import { Optional } from '@rolster/commons';
 import { LambdaOptions } from '../types';
 
-class LambdaStore {
+class Lambdas {
   private collection: Map<Function, LambdaOptions> = new Map();
 
-  public push(lambda: Function, config: LambdaOptions): void {
-    this.collection.set(lambda, config);
+  public register(lambda: Function, options: LambdaOptions): void {
+    this.collection.set(lambda, options);
   }
 
   public request(lambda: Function): Optional<LambdaOptions> {
@@ -13,4 +13,12 @@ class LambdaStore {
   }
 }
 
-export const lambdasStore = new LambdaStore();
+const lambdas = new Lambdas();
+
+export function registerLambda(lambda: Function, options: LambdaOptions): void {
+  lambdas.register(lambda, options);
+}
+
+export function requestLambda(lambda: Function): Optional<LambdaOptions> {
+  return lambdas.request(lambda);
+}

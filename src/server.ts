@@ -1,19 +1,19 @@
 import { parse } from '@rolster/commons';
 import dotenv, { DotenvConfigOptions } from 'dotenv';
-import express, { Express } from 'express';
+import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';
-import { registerControllers } from './controller';
-import { registerLambdas } from './lambda';
+import { registerControllers } from './controllers';
+import { registerLambdas } from './lambdas';
 
 type Options = Partial<DotenvConfigOptions>;
 
 interface CoopplinsOptions {
-  controllers?: Function[];
-  handlers?: RequestHandler[];
-  lambdas?: Function[];
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
-  handleError?: (ex: unknown) => void;
+  controllers?: Function[];
+  handleError?: (error: any) => void;
+  handlers?: RequestHandler[];
+  lambdas?: Function[];
 }
 
 class Coopplins {
@@ -23,7 +23,7 @@ class Coopplins {
     const { afterAll, beforeAll, controllers, handlers, handleError, lambdas } =
       this.options;
 
-    const server: Express = express();
+    const server = express();
 
     if (beforeAll) {
       await beforeAll();
@@ -59,12 +59,12 @@ class Coopplins {
   }
 }
 
-export const environment = <T = string>(key: string, options?: Options): T => {
+export function environment<T = string>(key: string, options?: Options): T {
   dotenv.config(options);
 
   return parse<T>(String(process.env[key]));
-};
+}
 
-export const coopplins = (props: Partial<CoopplinsOptions>): Coopplins => {
-  return new Coopplins(props);
-};
+export function coopplins(options: Partial<CoopplinsOptions>): Coopplins {
+  return new Coopplins(options);
+}

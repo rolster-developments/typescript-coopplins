@@ -1,5 +1,5 @@
 import { HttpMethod } from '../enums';
-import { routesStore } from '../stores';
+import { registerRoutes } from '../stores';
 import { MiddlewareToken } from '../types';
 
 interface RouteOptions {
@@ -19,7 +19,7 @@ function createRoute(options: RouteOptions): MethodDecorator {
   const { http, middlewares, path } = options;
 
   return ({ constructor }, key) => {
-    routesStore.push(constructor, { http, key, middlewares, path });
+    registerRoutes(constructor, { http, key, middlewares, path });
   };
 }
 

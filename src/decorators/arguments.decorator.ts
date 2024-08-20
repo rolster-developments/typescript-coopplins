@@ -1,12 +1,12 @@
 import { InjectableToken } from '@rolster/invertly';
-import { ArgumentsType } from '../enums';
-import { argsStore } from '../stores';
+import { Arguments } from '../enums';
+import { registerArgument } from '../stores';
 import { ArgumentsDataType as DataType } from '../types';
 
 type Decorator = ParameterDecorator;
 
 interface ParameterOptions {
-  type: ArgumentsType;
+  type: Arguments;
   dataType?: DataType;
   key?: string;
 }
@@ -16,7 +16,7 @@ function createParameter(options: ParameterOptions): Decorator {
     if (name) {
       const { type, key, dataType } = options;
 
-      argsStore.push(constructor, {
+      registerArgument(constructor, {
         dataType: dataType || 'string',
         index,
         key,
@@ -30,22 +30,22 @@ function createParameter(options: ParameterOptions): Decorator {
 export function Inject(token: InjectableToken): Decorator {
   return ({ constructor }, name, index) => {
     if (name) {
-      argsStore.push(constructor, {
+      registerArgument(constructor, {
         index,
         token,
         name,
-        type: ArgumentsType.Inject
+        type: Arguments.Inject
       });
     }
   };
 }
 
 export function Body(key?: string): Decorator {
-  return createParameter({ key, type: ArgumentsType.Body });
+  return createParameter({ key, type: Arguments.Body });
 }
 
 export function Header(key: string, dataType?: DataType): Decorator {
-  return createParameter({ dataType, key, type: ArgumentsType.Header });
+  return createParameter({ dataType, key, type: Arguments.Header });
 }
 
 export function HeaderBool(key: string): Decorator {
@@ -57,7 +57,7 @@ export function HeaderNumber(key: string): Decorator {
 }
 
 export function Path(key: string, dataType?: DataType): Decorator {
-  return createParameter({ dataType, key, type: ArgumentsType.Path });
+  return createParameter({ dataType, key, type: Arguments.Path });
 }
 
 export function PathBool(key: string): Decorator {
@@ -69,7 +69,7 @@ export function PathNumber(key: string): Decorator {
 }
 
 export function Query(key: string, dataType?: DataType): Decorator {
-  return createParameter({ dataType, key, type: ArgumentsType.Query });
+  return createParameter({ dataType, key, type: Arguments.Query });
 }
 
 export function QueryBool(key: string): Decorator {

@@ -1,13 +1,21 @@
-class MiddlewareStore {
+class Middlewares {
   private collection: Function[] = [];
 
-  public push(middleware: Function): void {
+  public register(middleware: Function): void {
     this.collection.push(middleware);
   }
 
-  public has(middleware: Function): boolean {
+  public itIsExists(middleware: Function): boolean {
     return this.collection.includes(middleware);
   }
 }
 
-export const middlewaresStore = new MiddlewareStore();
+const middlewares = new Middlewares();
+
+export function registerMiddleware(lambda: Function): void {
+  middlewares.register(lambda);
+}
+
+export function itIsExistsMiddleware(lambda: Function): boolean {
+  return middlewares.itIsExists(lambda);
+}

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
-import { Result, ResultServer } from '../types';
+import { MiddlewareToken, Result, ResultServer } from '../types';
 
 const message = 'An error occurred during the execution of the process';
 const errorCode = HttpCode.InternalServerError;
@@ -13,13 +13,17 @@ type Service = (
   res: Response
 ) => Promise<ResultServer | any> | any;
 
-type Error = (error: unknown) => void;
+type Error = (error: any) => void;
 
-interface ServiceOptions {
-  response: Response;
-  request: Request;
+interface APIServiceOptions {
   service: Service;
   handleError?: Error;
+  middlewares?: MiddlewareToken[];
+}
+
+interface ServiceOptions extends APIServiceOptions {
+  response: Response;
+  request: Request;
 }
 
 function resolveService(result: any, response: Response): void {
@@ -37,8 +41,8 @@ function resolveService(result: any, response: Response): void {
   }
 }
 
-function rejectService(exception: any, props: ServiceOptions): void {
-  const { response, handleError } = props;
+function rejectService(exception: any, options: ServiceOptions): void {
+  const { response, handleError } = options;
 
   if (handleError) {
     handleError(exception); // Listener error
@@ -56,29 +60,28 @@ function rejectService(exception: any, props: ServiceOptions): void {
 function createService(options: ServiceOptions): Promise<any> {
   const { request, response, service } = options;
 
-  const resultService = service(request, response);
+  const result = service(request, response);
 
-  if (resultService instanceof Promise) {
-    return resultService
-      .then((result) => resolveService(result, response))
-      .catch((error) => rejectService(error, options));
-  }
-
-  const resultPromise = response.status(HttpCode.Ok).json(resultService);
-
-  return Promise.resolve(resultPromise);
+  return result instanceof Promise
+    ? result
+        .then((result) => {
+          resolveService(result, response);
+        })
+        .catch((error) => {
+          rejectService(error, options);
+        })
+    : Promise.resolve(response.status(HttpCode.Ok).json(result));
 }
 
-export function createAPIService(
-  service: Service,
-  handleError?: Error
-): Express {
+export function createAPIService(options: APIServiceOptions): Express {
+  const { service, handleError } = options;
+
   return (request: Request, response: Response) => {
     return createService({
       request,
       response,
       handleError,
       service
-    });
+    }).then(() => {});
   };
 }

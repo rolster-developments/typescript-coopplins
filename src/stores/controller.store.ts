@@ -1,16 +1,29 @@
 import { Optional } from '@rolster/commons';
-import { ControllerConfig } from '../types';
+import { ControllerOptions } from '../types';
 
-class ControllerStore {
-  private collection: Map<Function, ControllerConfig> = new Map();
+class Controllers {
+  private collection: Map<Function, ControllerOptions> = new Map();
 
-  public push(controller: Function, config: ControllerConfig): void {
-    this.collection.set(controller, config);
+  public register(controller: Function, options: ControllerOptions): void {
+    this.collection.set(controller, options);
   }
 
-  public request(controller: Function): Optional<ControllerConfig> {
+  public request(controller: Function): Optional<ControllerOptions> {
     return Optional.build(this.collection.get(controller));
   }
 }
 
-export const controllersStore = new ControllerStore();
+const controllers = new Controllers();
+
+export function registerController(
+  controller: Function,
+  options: ControllerOptions
+): void {
+  controllers.register(controller, options);
+}
+
+export function requestController(
+  controller: Function
+): Optional<ControllerOptions> {
+  return controllers.request(controller);
+}

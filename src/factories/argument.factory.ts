@@ -1,9 +1,10 @@
 import { parseBoolean } from '@rolster/commons';
 import createFromInvertly from '@rolster/invertly';
 import { Request } from 'express';
-import { ArgumentsType } from '../enums';
-import { argsStore } from '../stores';
-import { ArgumentsDataType, requestContext } from '../types';
+import { getContext } from '../context';
+import { Arguments } from '../enums';
+import { requestArgument } from '../stores';
+import { ArgumentsDataType } from '../types';
 
 function resolveValue(value: any, dataType?: ArgumentsDataType): any {
   if (!value || !dataType) {
@@ -25,7 +26,7 @@ export function createHttpArguments(
   key: string | symbol,
   request: Request
 ): any[] {
-  const args = argsStore.request(object.constructor, key);
+  const args = requestArgument(object.constructor, key);
 
   const values: any[] = [];
 
@@ -33,24 +34,24 @@ export function createHttpArguments(
     const { dataType, key, type, token } = arg;
 
     switch (type) {
-      case ArgumentsType.Body:
+      case Arguments.Body:
         values.push(key ? request.body[key] : request.body);
         break;
-      case ArgumentsType.Header:
+      case Arguments.Header:
         values.push(key && resolveValue(request.headers[key], dataType));
         break;
-      case ArgumentsType.Path:
+      case Arguments.Path:
         values.push(key && resolveValue(request.params[key], dataType));
         break;
-      case ArgumentsType.Query:
+      case Arguments.Query:
         values.push(key && resolveValue(request.query[key], dataType));
         break;
-      case ArgumentsType.Inject:
+      case Arguments.Inject:
         values.push(
           token &&
             createFromInvertly({
               config: {
-                context: requestContext(request),
+                context: getContext(request),
                 token
               }
             })

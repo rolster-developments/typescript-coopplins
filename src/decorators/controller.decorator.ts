@@ -1,5 +1,5 @@
 import { registerInjectable } from '@rolster/invertly';
-import { controllersStore } from '../stores';
+import { registerController } from '../stores';
 import { MiddlewareToken } from '../types';
 
 type Tokens = MiddlewareToken[];
@@ -9,7 +9,7 @@ export function Controller(
   middlewares: Tokens = []
 ): ClassDecorator {
   return (token) => {
-    controllersStore.push(token, { basePath, middlewares });
+    registerController(token, { basePath, middlewares });
 
     registerInjectable({
       config: {

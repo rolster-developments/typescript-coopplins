@@ -31,7 +31,7 @@ const rollupTs = (file) => {
       }
     ],
     external: [
-      '@rolster/helpers-advanced',
+      '@rolster/commons',
       '@rolster/invertly',
       'dotenv',
       'express',
@@ -41,6 +41,6 @@ const rollupTs = (file) => {
   };
 };
 
-const exports = ['index', 'types/index'];
+const exports = ['index', 'types'];
 
 export default [...exports.map((file) => rollupTs(file))];

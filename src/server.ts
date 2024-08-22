@@ -4,12 +4,14 @@ import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import { registerControllers } from './controllers';
 import { registerLambdas } from './lambdas';
+import { ClousureToken } from './types';
 
 type Options = Partial<DotenvConfigOptions>;
 
 interface CoopplinsOptions {
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
+  clousures?: ClousureToken[];
   controllers?: Function[];
   handleError?: (error: any) => void;
   handlers?: RequestHandler[];
@@ -20,8 +22,15 @@ class Coopplins {
   constructor(private options: Partial<CoopplinsOptions>) {}
 
   public async start(port: number): Promise<void> {
-    const { afterAll, beforeAll, controllers, handlers, handleError, lambdas } =
-      this.options;
+    const {
+      afterAll,
+      beforeAll,
+      clousures,
+      controllers,
+      handlers,
+      handleError,
+      lambdas
+    } = this.options;
 
     const server = express();
 
@@ -38,6 +47,7 @@ class Coopplins {
     if (controllers) {
       registerControllers({
         controllers,
+        clousures,
         error: handleError,
         server
       });
@@ -46,6 +56,7 @@ class Coopplins {
     if (lambdas) {
       registerLambdas({
         lambdas,
+        clousures,
         error: handleError,
         server
       });

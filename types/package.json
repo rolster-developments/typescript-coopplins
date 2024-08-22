@@ -1,8 +1,8 @@
 {
   "name": "@rolster/coopplins-server/types",
-  "types": "../dist/esm/types/index.d.ts",
-  "main": "../dist/cjs/types/index.js",
-  "module": "../dist/esm/types/index.js",
-  "unpkg": "../dist/es/types/index.js",
+  "types": "../dist/esm/types.d.ts",
+  "main": "../dist/cjs/types.js",
+  "module": "../dist/esm/types.js",
+  "unpkg": "../dist/es/types.js",
   "sideEffects": false
 }

@@ -5,27 +5,30 @@ import {
   createHttpArguments,
   createRoute,
   createMiddlewares,
-  createAPIService
+  createService
 } from './factories';
 import { requestLambda } from './stores';
+import { ClousureToken } from './types';
 
 type RouteCallback = (request: Request, response: Response) => Promise<any>;
 
-interface LambdaOptions {
+interface LambdasOptions {
   lambdas: Function[];
   server: Express;
+  clousures?: ClousureToken[];
   error?: (error: unknown) => void;
 }
 
-interface LambdaCallback {
+interface LambdaOptions {
   token: Function;
+  clousures?: ClousureToken[];
   error?: (error: unknown) => void;
 }
 
-function createCallback(config: LambdaCallback): RouteCallback {
-  const { token, error } = config;
+function createLambda(options: LambdaOptions): RouteCallback {
+  const { token, clousures, error } = options;
 
-  return createAPIService({
+  return createService({
     service: (request: Request, response: Response) => {
       const lambda = createFromInvertly<any>({
         config: {
@@ -43,12 +46,13 @@ function createCallback(config: LambdaCallback): RouteCallback {
 
       return resolver(...[...args, request, response]);
     },
+    clousures,
     handleError: error
   });
 }
 
-export function registerLambdas(options: LambdaOptions): void {
-  const { lambdas, error, server } = options;
+export function registerLambdas(options: LambdasOptions): void {
+  const { lambdas, clousures, error, server } = options;
 
   for (const token of lambdas) {
     requestLambda(token).present((options) => {
@@ -60,7 +64,7 @@ export function registerLambdas(options: LambdaOptions): void {
 
       route('/', [
         ...createMiddlewares(middlewares),
-        createCallback({ token, error })
+        createLambda({ token, clousures, error })
       ]);
 
       server.use(path, router); // Register in server

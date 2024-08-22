@@ -20,7 +20,7 @@ export type MiddlewareToken = Function | RequestHandler | ValidationChain[];
 export type MiddlewareRoute = RequestHandler | ValidationChain[];
 
 export interface OnMiddleware {
-  execute(request: Request, response: Response, next: NextFunction): any;
+  onMiddleware: (req: Request, res: Response, next: NextFunction) => any;
 }
 
 export type ControllerOptions = {
@@ -32,6 +32,13 @@ export interface LambdaOptions {
   http: HttpMethod;
   middlewares: MiddlewareToken[];
   path: string;
+}
+
+export type ClousureToken = Function;
+export type ClousureRoute = (request: Request, response: Response) => void;
+
+export interface OnClousure {
+  onClousure: (request: Request, response: Response) => void;
 }
 
 export type RouteOptions = {
@@ -58,9 +65,9 @@ export class Result<S, F, V = any> extends Sealed<
   }
 }
 
-export type ResultInvalid<T = unknown> = {
+export type ResultInvalid<T = any> = {
   data: T;
   statusCode: number;
 };
 
-export type ResultServer<T = unknown> = Result<T, ResultInvalid | unknown>;
+export type ResultServer<T = any> = Result<T, ResultInvalid | any>;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
-import { MiddlewareToken, Result, ResultServer } from '../types';
+import { ClousureToken, MiddlewareToken, Result, ResultServer } from '../types';
 
 const message = 'An error occurred during the execution of the process';
 const errorCode = HttpCode.InternalServerError;
@@ -15,20 +15,21 @@ type Service = (
 
 type Error = (error: any) => void;
 
-interface APIServiceOptions {
+interface ServiceOptions {
   service: Service;
+  clousures?: ClousureToken[];
   handleError?: Error;
   middlewares?: MiddlewareToken[];
 }
 
-interface ServiceOptions extends APIServiceOptions {
+interface HttpServiceOptions extends ServiceOptions {
   response: Response;
   request: Request;
 }
 
 function resolveService(result: any, response: Response): void {
   if (result instanceof Result) {
-    result.when({
+    return result.when({
       success: (data) => {
         response.status(HttpCode.Ok).json(data);
       },
@@ -36,12 +37,12 @@ function resolveService(result: any, response: Response): void {
         response.status(statusCode || errorCode).json(data);
       }
     });
-  } else {
-    response.status(HttpCode.Ok).json(result);
   }
+
+  response.status(HttpCode.Ok).json(result);
 }
 
-function rejectService(exception: any, options: ServiceOptions): void {
+function rejectService(exception: any, options: HttpServiceOptions): void {
   const { response, handleError } = options;
 
   if (handleError) {
@@ -57,7 +58,7 @@ function rejectService(exception: any, options: ServiceOptions): void {
   }
 }
 
-function createService(options: ServiceOptions): Promise<any> {
+function createHttpService(options: HttpServiceOptions): Promise<any> {
   const { request, response, service } = options;
 
   const result = service(request, response);
@@ -73,15 +74,12 @@ function createService(options: ServiceOptions): Promise<any> {
     : Promise.resolve(response.status(HttpCode.Ok).json(result));
 }
 
-export function createAPIService(options: APIServiceOptions): Express {
-  const { service, handleError } = options;
-
+export function createService(options: ServiceOptions): Express {
   return (request: Request, response: Response) => {
-    return createService({
-      request,
-      response,
-      handleError,
-      service
-    }).then(() => {});
+    return createHttpService({ ...options, request, response }).then(() => {
+      options.clousures?.forEach((clousure) => {
+        clousure(request, response);
+      });
+    });
   };
 }

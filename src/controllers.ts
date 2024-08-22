@@ -1,14 +1,14 @@
 import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response, Router } from 'express';
 import {
-  createAPIService,
+  createService,
   createHttpArguments,
   createMiddleware,
   createMiddlewares,
   createRoute
 } from './factories';
 import { requestController, requestRoutes } from './stores';
-import { MiddlewareToken } from './types';
+import { ClousureToken, MiddlewareToken } from './types';
 
 type Controller = Record<string | symbol, Function>;
 type Resolver = (request: Request, response: Response) => Promise<any>;
@@ -16,12 +16,14 @@ type Resolver = (request: Request, response: Response) => Promise<any>;
 interface ControllersOptions {
   controllers: Function[];
   server: Express;
+  clousures?: ClousureToken[];
   error?: (err: any) => void;
 }
 
 interface ControllerOptions {
   controller: Controller;
   key: string | symbol;
+  clousures?: ClousureToken[];
   error?: (ex: any) => void;
 }
 
@@ -37,10 +39,10 @@ function createRouter(middlewares: MiddlewareToken[]): Router {
   return router;
 }
 
-function createResolver(options: ControllerOptions): Resolver {
-  const { controller, error, key } = options;
+function createController(options: ControllerOptions): Resolver {
+  const { clousures, controller, error, key } = options;
 
-  return createAPIService({
+  return createService({
     service: (request: Request, response: Response) => {
       const resolver = controller[key].bind(controller);
 
@@ -48,12 +50,13 @@ function createResolver(options: ControllerOptions): Resolver {
 
       return resolver(...[...args, request, response]);
     },
+    clousures,
     handleError: error
   });
 }
 
 export function registerControllers(options: ControllersOptions): void {
-  const { controllers, error, server } = options;
+  const { clousures, controllers, error, server } = options;
 
   for (const token of controllers) {
     requestController(token).present(({ basePath, middlewares }) => {
@@ -69,7 +72,7 @@ export function registerControllers(options: ControllersOptions): void {
 
         route(path, [
           ...createMiddlewares(middlewares),
-          createResolver({ controller, key, error })
+          createController({ controller, key, clousures, error })
         ]);
       }
 

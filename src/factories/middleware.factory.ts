@@ -5,7 +5,7 @@ import { itIsExistsMiddleware } from '../stores';
 import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
 
 function itIsOnMiddleware(middleware: any): middleware is OnMiddleware {
-  return typeof middleware['execute'] === 'function';
+  return typeof middleware['onMiddleware'] === 'function';
 }
 
 export function createMiddleware(
@@ -25,7 +25,7 @@ export function createMiddleware(
 
   return itIsOnMiddleware(middleware)
     ? Optional.of((req: Request, res: Response, next: NextFunction) => {
-        return middleware.execute(req, res, next);
+        return middleware.onMiddleware(req, res, next);
       })
     : Optional.empty();
 }

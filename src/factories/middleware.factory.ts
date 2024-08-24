@@ -8,9 +8,10 @@ function itIsOnMiddleware(middleware: any): middleware is OnMiddleware {
   return typeof middleware['onMiddleware'] === 'function';
 }
 
-export function createMiddleware(
-  token: MiddlewareToken
-): Optional<MiddlewareRoute> {
+type Route = Optional<MiddlewareRoute>;
+type Routes = MiddlewareRoute[];
+
+export function createMiddleware(token: MiddlewareToken): Route {
   if (typeof token !== 'function') {
     return Optional.of(token);
   }
@@ -21,7 +22,7 @@ export function createMiddleware(
     );
   }
 
-  const middleware = createFromInvertly({ config: { token } });
+  const middleware = createFromInvertly({ token });
 
   return itIsOnMiddleware(middleware)
     ? Optional.of((req: Request, res: Response, next: NextFunction) => {
@@ -30,10 +31,8 @@ export function createMiddleware(
     : Optional.empty();
 }
 
-export function createMiddlewares(
-  tokens: MiddlewareToken[]
-): MiddlewareRoute[] {
-  return tokens.reduce((middlewares: MiddlewareRoute[], middleware) => {
+export function createMiddlewares(tokens: MiddlewareToken[]): Routes {
+  return tokens.reduce((middlewares: Routes, middleware) => {
     createMiddleware(middleware).present((call) => {
       middlewares.push(call);
     });

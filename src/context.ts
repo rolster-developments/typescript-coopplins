@@ -2,18 +2,23 @@ import { Context } from '@rolster/invertly';
 
 const KEY = 'rolster_context';
 
-export function getContext(request: LiteralObject): Undefined<Context> {
+export function getContextFromRequest(
+  request: LiteralObject
+): Undefined<Context> {
   const context = request[KEY];
 
   return context instanceof Context ? context : undefined;
 }
 
-export function setContext(request: LiteralObject, context: Context): void {
+export function setContextForRequest(
+  request: LiteralObject,
+  context: Context
+): void {
   request[KEY] = context;
 }
 
-export function requestContext(request: LiteralObject): Context {
-  const currentContext = getContext(request);
+export function createContextForRequest(request: LiteralObject): Context {
+  const currentContext = getContextFromRequest(request);
 
   if (currentContext) {
     return currentContext;
@@ -21,7 +26,7 @@ export function requestContext(request: LiteralObject): Context {
 
   const context = new Context();
 
-  setContext(request, context);
+  setContextForRequest(request, context);
 
   return context;
 }

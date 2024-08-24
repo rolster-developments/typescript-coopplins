@@ -15,11 +15,11 @@ export function createClousure(token: ClousureToken): Optional<ClousureRoute> {
     });
   }
 
-  const clousure = createFromInvertly({ config: { token } });
+  const clousure = createFromInvertly({ token });
 
   return itIsOnClousure(clousure)
-    ? Optional.of((req: Request, res: Response) => {
-        clousure.onClousure(req, res);
+    ? Optional.of((request: Request, response: Response) => {
+        clousure.onClousure(request, response);
       })
     : Optional.empty();
 }

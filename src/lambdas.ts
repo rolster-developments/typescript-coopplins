@@ -1,6 +1,6 @@
 import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response } from 'express';
-import { getContext } from './context';
+import { getContextFromRequest } from './context';
 import {
   createHttpArguments,
   createRoute,
@@ -31,10 +31,8 @@ function createLambda(options: LambdaOptions): RouteCallback {
   return createService({
     service: (request: Request, response: Response) => {
       const lambda = createFromInvertly<any>({
-        config: {
-          context: getContext(request),
-          token
-        }
+        context: getContextFromRequest(request),
+        token
       });
 
       if (typeof lambda.execute !== 'function') {

@@ -60,7 +60,7 @@ export function registerControllers(options: ControllersOptions): void {
 
   for (const token of controllers) {
     requestController(token).present(({ basePath, middlewares }) => {
-      const controller = createFromInvertly<Controller>({ config: { token } });
+      const controller = createFromInvertly<Controller>({ token });
 
       const routesOptions = requestRoutes(token);
       const router = createRouter(middlewares);

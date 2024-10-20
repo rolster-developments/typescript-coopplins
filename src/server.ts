@@ -11,9 +11,9 @@ type Options = Partial<DotenvConfigOptions>;
 interface CoopplinsOptions {
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
   controllers?: Function[];
-  handleError?: (error: any) => void;
   handlers?: RequestHandler[];
   lambdas?: Function[];
 }
@@ -25,10 +25,10 @@ class Coopplins {
     const {
       afterAll,
       beforeAll,
+      catchError,
       clousures,
       controllers,
       handlers,
-      handleError,
       lambdas
     } = this.options;
 
@@ -46,18 +46,18 @@ class Coopplins {
 
     if (controllers) {
       registerControllers({
-        controllers,
+        catchError,
         clousures,
-        error: handleError,
+        controllers,
         server
       });
     }
 
     if (lambdas) {
       registerLambdas({
-        lambdas,
+        catchError,
         clousures,
-        error: handleError,
+        lambdas,
         server
       });
     }

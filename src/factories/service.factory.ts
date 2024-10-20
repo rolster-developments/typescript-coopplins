@@ -13,12 +13,10 @@ type Service = (
   res: Response
 ) => Promise<ResultServer | any> | any;
 
-type Error = (error: any) => void;
-
 interface ServiceOptions {
   service: Service;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
-  handleError?: Error;
   middlewares?: MiddlewareToken[];
 }
 
@@ -34,7 +32,7 @@ function resolveService(result: any, response: Response): void {
         response.status(HttpCode.Ok).json(data);
       },
       failure: ({ statusCode, data }) => {
-        response.status(statusCode || errorCode).json(data);
+        response.status(statusCode ?? errorCode).json(data);
       }
     });
   }
@@ -43,10 +41,10 @@ function resolveService(result: any, response: Response): void {
 }
 
 function rejectService(exception: any, options: HttpServiceOptions): void {
-  const { response, handleError } = options;
+  const { catchError, response } = options;
 
-  if (handleError) {
-    handleError(exception); // Listener error
+  if (catchError) {
+    catchError(exception); // Listener error
   }
 
   if (exception instanceof CoopplinsError) {

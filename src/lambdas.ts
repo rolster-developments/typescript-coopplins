@@ -15,18 +15,18 @@ type RouteCallback = (request: Request, response: Response) => Promise<any>;
 interface LambdasOptions {
   lambdas: Function[];
   server: Express;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
-  error?: (error: unknown) => void;
 }
 
 interface LambdaOptions {
   token: Function;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
-  error?: (error: unknown) => void;
 }
 
 function createLambda(options: LambdaOptions): RouteCallback {
-  const { token, clousures, error } = options;
+  const { token, catchError, clousures } = options;
 
   return createService({
     service: (request: Request, response: Response) => {
@@ -45,12 +45,12 @@ function createLambda(options: LambdaOptions): RouteCallback {
       return resolver(...[...args, request, response]);
     },
     clousures,
-    handleError: error
+    catchError
   });
 }
 
 export function registerLambdas(options: LambdasOptions): void {
-  const { lambdas, clousures, error, server } = options;
+  const { lambdas, server, catchError, clousures } = options;
 
   for (const token of lambdas) {
     requestLambda(token).present((options) => {
@@ -62,7 +62,7 @@ export function registerLambdas(options: LambdasOptions): void {
 
       route('/', [
         ...createMiddlewares(middlewares),
-        createLambda({ token, clousures, error })
+        createLambda({ token, clousures, catchError })
       ]);
 
       server.use(path, router); // Register in server

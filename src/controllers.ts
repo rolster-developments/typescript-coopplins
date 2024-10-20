@@ -16,15 +16,15 @@ type Resolver = (request: Request, response: Response) => Promise<any>;
 interface ControllersOptions {
   controllers: Function[];
   server: Express;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
-  error?: (err: any) => void;
 }
 
 interface ControllerOptions {
   controller: Controller;
   key: string | symbol;
+  catchError?: (error: any) => void;
   clousures?: ClousureToken[];
-  error?: (ex: any) => void;
 }
 
 function createRouter(middlewares: MiddlewareToken[]): Router {
@@ -40,7 +40,7 @@ function createRouter(middlewares: MiddlewareToken[]): Router {
 }
 
 function createController(options: ControllerOptions): Resolver {
-  const { clousures, controller, error, key } = options;
+  const { controller, key, catchError, clousures } = options;
 
   return createService({
     service: (request: Request, response: Response) => {
@@ -51,12 +51,12 @@ function createController(options: ControllerOptions): Resolver {
       return resolver(...[...args, request, response]);
     },
     clousures,
-    handleError: error
+    catchError
   });
 }
 
 export function registerControllers(options: ControllersOptions): void {
-  const { clousures, controllers, error, server } = options;
+  const { controllers, server, catchError, clousures } = options;
 
   for (const token of controllers) {
     requestController(token).present(({ basePath, middlewares }) => {
@@ -72,7 +72,12 @@ export function registerControllers(options: ControllersOptions): void {
 
         route(path, [
           ...createMiddlewares(middlewares),
-          createController({ controller, key, clousures, error })
+          createController({
+            controller,
+            key,
+            clousures,
+            catchError
+          })
         ]);
       }
 

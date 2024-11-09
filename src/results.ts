@@ -25,6 +25,10 @@ export function resultNotFound<T>(data: T): ResultServer {
   return resultFailure(HttpCode.NotFound, data);
 }
 
+export function resultDomainError<T>(data: T): ResultServer {
+  return resultFailure(HttpCode.UnprocessableDomain, data);
+}
+
 export function resultInternalServerError<T>(data: T): ResultServer {
   return resultFailure(HttpCode.InternalServerError, data);
 }

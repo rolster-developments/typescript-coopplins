@@ -30,7 +30,7 @@ function createLambda(options: LambdaOptions): RouteCallback {
 
   return createService({
     service: (request: Request, response: Response) => {
-      const lambda = createFromInvertly<any>({
+      const lambda = createFromInvertly({
         context: getContextFromRequest(request),
         token
       });

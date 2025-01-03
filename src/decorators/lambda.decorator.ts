@@ -3,9 +3,9 @@ import { HttpMethod } from '../enums';
 import { registerLambda } from '../stores';
 import { LambdaOptions, MiddlewareToken } from '../types';
 
-function createLambda(props: LambdaOptions): ClassDecorator {
+function createLambda(options: LambdaOptions): ClassDecorator {
   return (token) => {
-    registerLambda(token, props);
+    registerLambda(token, options);
 
     registerInjectable({
       scopeable: true,

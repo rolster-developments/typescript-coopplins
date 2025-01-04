@@ -11,7 +11,7 @@ interface RouteOptions {
 type Options = Omit<RouteOptions, 'http' | 'path'>;
 type HttpOptions = Partial<Options>;
 
-const DEFAULT_CONFIG: Options = {
+const DEFAULT_OPTIONS: Options = {
   middlewares: []
 };
 
@@ -25,7 +25,7 @@ function createRoute(options: RouteOptions): MethodDecorator {
 
 export function Post(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Post
@@ -34,7 +34,7 @@ export function Post(path = '/', options?: HttpOptions): MethodDecorator {
 
 export function Get(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Get
@@ -43,7 +43,7 @@ export function Get(path = '/', options?: HttpOptions): MethodDecorator {
 
 export function Put(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Put
@@ -52,7 +52,7 @@ export function Put(path = '/', options?: HttpOptions): MethodDecorator {
 
 export function Delete(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Delete
@@ -61,7 +61,7 @@ export function Delete(path = '/', options?: HttpOptions): MethodDecorator {
 
 export function Patch(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Patch
@@ -70,7 +70,7 @@ export function Patch(path = '/', options?: HttpOptions): MethodDecorator {
 
 export function Options(path = '/', options?: HttpOptions): MethodDecorator {
   return createRoute({
-    ...DEFAULT_CONFIG,
+    ...DEFAULT_OPTIONS,
     ...options,
     path,
     http: HttpMethod.Options

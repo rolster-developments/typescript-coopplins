@@ -1,7 +1,7 @@
 class Clousures {
   private collection: Function[] = [];
 
-  public itIsExists(clousure: Function): boolean {
+  public itIsDefined(clousure: Function): boolean {
     return this.collection.includes(clousure);
   }
 
@@ -12,8 +12,8 @@ class Clousures {
 
 const clousures = new Clousures();
 
-export function itIsExistsClousure(clousure: Function): boolean {
-  return clousures.itIsExists(clousure);
+export function itIsDefinedClousure(clousure: Function): boolean {
+  return clousures.itIsDefined(clousure);
 }
 
 export function registerClousure(clousure: Function): void {

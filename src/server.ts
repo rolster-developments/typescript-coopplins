@@ -22,48 +22,34 @@ class Coopplins {
   constructor(private options: Partial<CoopplinsOptions>) {}
 
   public async start(port: number): Promise<void> {
-    const {
-      afterAll,
-      beforeAll,
-      catchError,
-      clousures,
-      controllers,
-      handlers,
-      lambdas
-    } = this.options;
-
     const server = express();
 
-    if (beforeAll) {
-      await beforeAll();
-    }
+    this.options.beforeAll && (await this.options.beforeAll());
 
-    if (handlers) {
-      for (const handler of handlers) {
+    if (this.options.handlers) {
+      for (const handler of this.options.handlers) {
         server.use(handler);
       }
     }
 
-    if (controllers) {
+    this.options.controllers &&
       registerControllers({
-        catchError,
-        clousures,
-        controllers,
+        catchError: this.options.catchError,
+        clousures: this.options.clousures,
+        controllers: this.options.controllers,
         server
       });
-    }
 
-    if (lambdas) {
+    this.options.lambdas &&
       registerLambdas({
-        catchError,
-        clousures,
-        lambdas,
+        catchError: this.options.catchError,
+        clousures: this.options.clousures,
+        lambdas: this.options.lambdas,
         server
       });
-    }
 
     try {
-      server.listen(port, afterAll);
+      server.listen(port, this.options.afterAll);
     } catch (error) {
       console.error(error);
     }

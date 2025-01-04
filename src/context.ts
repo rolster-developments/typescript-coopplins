@@ -18,15 +18,12 @@ export function setContextForRequest<K = string>(
 export function createContextForRequest<K = string>(
   request: LiteralObject
 ): Context<K> {
-  const currentContext = getContextFromRequest<K>(request);
+  let context = getContextFromRequest<K>(request);
 
-  if (currentContext) {
-    return currentContext;
+  if (!context) {
+    context = new Context<K>();
+    setContextForRequest(request, context);
   }
 
-  const requestContext = new Context<K>();
-
-  setContextForRequest(request, requestContext);
-
-  return requestContext;
+  return context;
 }

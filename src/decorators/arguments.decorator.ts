@@ -13,30 +13,26 @@ interface ParameterOptions {
 
 function createParameter(options: ParameterOptions): Decorator {
   return ({ constructor }, name, index) => {
-    if (name) {
-      const { type, key, dataType } = options;
-
+    name &&
       registerArgument(constructor, {
-        dataType: dataType || 'string',
+        dataType: options.dataType ?? 'string',
         index,
-        key,
+        key: options.key,
         name,
-        type
+        type: options.type
       });
-    }
   };
 }
 
 export function Inject(token: InjectableToken): Decorator {
   return ({ constructor }, name, index) => {
-    if (name) {
+    name &&
       registerArgument(constructor, {
         index,
         token,
         name,
         type: Arguments.Inject
       });
-    }
   };
 }
 

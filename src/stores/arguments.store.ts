@@ -1,63 +1,38 @@
+import { SecureMap } from '@rolster/commons';
 import { ArgumentsOptions } from '../types';
 
 type Token = string | symbol;
-type ArgumentsMap = Map<Token, ArgumentsOptions[]>;
-type Controllers = Map<Function, ArgumentsMap>;
+type Arguments = SecureMap<ArgumentsOptions[], Token>;
+type Controllers = SecureMap<Arguments, Function>;
 
-class Arguments {
-  private controllers: Controllers = new Map();
+class ArgumentsManager {
+  private controllers: Controllers;
+
+  constructor() {
+    this.controllers = new SecureMap(() => new SecureMap(() => []));
+  }
 
   public register(controller: Function, options: ArgumentsOptions): void {
-    const { name: token, index } = options;
-
-    const argsCollection = this.request(controller, token);
-
-    argsCollection[index] = options;
+    this.request(controller, options.name)[options.index] = options;
   }
 
   public request(controller: Function, token: Token): ArgumentsOptions[] {
-    const args = this.requestArgumentsForController(controller);
-
-    const currentOptions = args.get(token);
-
-    if (currentOptions) {
-      return currentOptions;
-    }
-
-    const options: ArgumentsOptions[] = [];
-
-    args.set(token, options);
-
-    return options;
-  }
-
-  private requestArgumentsForController(controller: Function): ArgumentsMap {
-    const currentArguments = this.controllers.get(controller);
-
-    if (currentArguments) {
-      return currentArguments;
-    }
-
-    const args = new Map<Token, ArgumentsOptions[]>();
-
-    this.controllers.set(controller, args);
-
-    return args;
+    return this.controllers.request(controller).request(token);
   }
 }
 
-const args = new Arguments();
+const manager = new ArgumentsManager();
 
 export function registerArgument(
   controller: Function,
   options: ArgumentsOptions
 ): void {
-  args.register(controller, options);
+  manager.register(controller, options);
 }
 
 export function requestArgument(
   controller: Function,
   token: Token
 ): ArgumentsOptions[] {
-  return args.request(controller, token);
+  return manager.request(controller, token);
 }

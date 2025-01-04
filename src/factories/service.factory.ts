@@ -40,36 +40,28 @@ function resolveService(result: any, response: Response): void {
   response.status(HttpCode.Ok).json(result);
 }
 
-function rejectService(exception: any, options: HttpServiceOptions): void {
-  const { catchError, response } = options;
+function rejectService(error: any, options: HttpServiceOptions): void {
+  options.catchError && options.catchError(error);
 
-  if (catchError) {
-    catchError(exception); // Listener error
-  }
-
-  if (exception instanceof CoopplinsError) {
-    const { code, data, message } = exception;
-
-    response.status(code).json({ message, data });
+  if (error instanceof CoopplinsError) {
+    options.response.status(error.code).json(error);
   } else {
-    response.status(errorCode).json({ message });
+    options.response.status(errorCode).json({ message });
   }
 }
 
 function createHttpService(options: HttpServiceOptions): Promise<any> {
-  const { request, response, service } = options;
-
-  const result = service(request, response);
+  const result = options.service(options.request, options.response);
 
   return result instanceof Promise
     ? result
         .then((result) => {
-          resolveService(result, response);
+          resolveService(result, options.response);
         })
         .catch((error) => {
           rejectService(error, options);
         })
-    : Promise.resolve(response.status(HttpCode.Ok).json(result));
+    : Promise.resolve(options.response.status(HttpCode.Ok).json(result));
 }
 
 export function createService(options: ServiceOptions): Express {

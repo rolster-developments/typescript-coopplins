@@ -44,7 +44,9 @@ function rejectService(error: any, options: HttpServiceOptions): void {
   options.catchError && options.catchError(error);
 
   if (error instanceof CoopplinsError) {
-    options.response.status(error.code).json(error);
+    options.response
+      .status(error.code)
+      .json({ message: error.message, data: error.data });
   } else {
     options.response.status(errorCode).json({ message });
   }
@@ -53,23 +55,24 @@ function rejectService(error: any, options: HttpServiceOptions): void {
 function createHttpService(options: HttpServiceOptions): Promise<any> {
   const result = options.service(options.request, options.response);
 
-  return result instanceof Promise
-    ? result
-        .then((result) => {
-          resolveService(result, options.response);
-        })
-        .catch((error) => {
-          rejectService(error, options);
-        })
-    : Promise.resolve(options.response.status(HttpCode.Ok).json(result));
+  if (result instanceof Promise) {
+    return result
+      .then((result) => {
+        resolveService(result, options.response);
+      })
+      .catch((error) => {
+        rejectService(error, options);
+      });
+  }
+
+  return Promise.resolve(options.response.status(HttpCode.Ok).json(result));
 }
 
 export function createService(options: ServiceOptions): Express {
-  return (request: Request, response: Response) => {
-    return createHttpService({ ...options, request, response }).then(() => {
+  return (request: Request, response: Response) =>
+    createHttpService({ ...options, request, response }).then(() => {
       options.clousures?.forEach((clousure) => {
         clousure(request, response);
       });
     });
-  };
 }

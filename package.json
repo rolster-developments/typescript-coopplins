@@ -1,6 +1,6 @@
 {
   "name": "@rolster/coopplins-server",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "description": "Package that contains a working environment to develop web applications and API's.",
   "module": "./dist/esm/index.js",
   "main": "./dist/cjs/index.js",
@@ -41,7 +41,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@rolster/commons": "^2.3.1",
+    "@rolster/commons": "^2.3.4",
     "@rolster/invertly": "^1.3.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

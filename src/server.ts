@@ -16,6 +16,7 @@ interface CoopplinsOptions {
   controllers?: Function[];
   handlers?: RequestHandler[];
   lambdas?: Function[];
+  trustProxy?: boolean | number;
 }
 
 class Coopplins {
@@ -31,6 +32,8 @@ class Coopplins {
         server.use(handler);
       }
     }
+
+    server.set('trust proxy', this.options.trustProxy ?? false);
 
     this.options.controllers &&
       registerControllers({

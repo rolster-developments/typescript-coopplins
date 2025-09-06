@@ -5,6 +5,7 @@ export default rolster({
   packages: [
     '@rolster/commons',
     '@rolster/invertly',
+    '@sentry/node',
     'dotenv',
     'express',
     'express-validator',

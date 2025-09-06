@@ -1,4 +1,5 @@
 import { parse } from '@rolster/commons';
+import Sentry from '@sentry/node';
 import dotenv, { DotenvConfigOptions } from 'dotenv';
 import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';
@@ -8,6 +9,11 @@ import { ClousureToken } from './types';
 
 type Options = Partial<DotenvConfigOptions>;
 
+interface SentryOptions {
+  dsn: string;
+  sendDefaultPii: boolean;
+}
+
 interface CoopplinsOptions {
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
@@ -16,6 +22,7 @@ interface CoopplinsOptions {
   controllers?: Function[];
   handlers?: RequestHandler[];
   lambdas?: Function[];
+  sentryOptions?: SentryOptions;
   trustProxy?: boolean | number;
 }
 
@@ -23,11 +30,15 @@ class Coopplins {
   constructor(private options: Partial<CoopplinsOptions>) {}
 
   public async start(port: number): Promise<void> {
+    this.options.sentryOptions && Sentry.init(this.options.sentryOptions);
+
     const server = express();
 
     this.options.beforeAll && (await this.options.beforeAll());
 
     if (this.options.handlers) {
+      this.options.sentryOptions && Sentry.setupExpressErrorHandler(server);
+
       for (const handler of this.options.handlers) {
         server.use(handler);
       }

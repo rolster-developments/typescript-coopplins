@@ -1,7 +1,7 @@
 import { parseBoolean } from '@rolster/commons';
 import createFromInvertly from '@rolster/invertly';
 import { Request } from 'express';
-import { getContextFromRequest } from '../context';
+import { contextOfRequest } from '../context';
 import { Arguments } from '../enums';
 import { requestArgument } from '../stores/arguments.store';
 import { ArgumentsDataType } from '../types';
@@ -50,7 +50,7 @@ export function createHttpArguments(
         values.push(
           token &&
             createFromInvertly({
-              context: getContextFromRequest(request),
+              context: contextOfRequest(request),
               token
             })
         );

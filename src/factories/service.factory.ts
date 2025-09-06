@@ -18,6 +18,7 @@ interface ServiceOptions {
   catchError?: (error: any) => void;
   clousures?: ClousureToken[];
   middlewares?: MiddlewareToken[];
+  statusCode?: number;
 }
 
 interface HttpServiceOptions extends ServiceOptions {
@@ -25,11 +26,15 @@ interface HttpServiceOptions extends ServiceOptions {
   request: Request;
 }
 
-function resolveService(result: any, response: Response): void {
+function resolveService(
+  result: any,
+  response: Response,
+  statusCode?: number
+): void {
   if (result instanceof Result) {
     return result.when({
       success: (data) => {
-        response.status(HttpCode.Ok).json(data);
+        response.status(statusCode ?? HttpCode.Ok).json(data);
       },
       failure: ({ statusCode, data }) => {
         response.status(statusCode ?? errorCode).json(data);
@@ -41,38 +46,47 @@ function resolveService(result: any, response: Response): void {
 }
 
 function rejectService(error: any, options: HttpServiceOptions): void {
-  options.catchError && options.catchError(error);
+  const { catchError, response } = options;
+
+  catchError && catchError(error);
 
   if (error instanceof CoopplinsError) {
-    options.response
+    response
       .status(error.code)
       .json({ message: error.message, data: error.data });
   } else {
-    options.response.status(errorCode).json({ message });
+    response.status(errorCode).json({ message });
   }
 }
 
-function createHttpService(options: HttpServiceOptions): Promise<any> {
-  const result = options.service(options.request, options.response);
+async function createHttpService(options: HttpServiceOptions): Promise<any> {
+  const { request, response, service, statusCode } = options;
+
+  const result = service(request, response);
 
   if (result instanceof Promise) {
-    return result
-      .then((result) => {
-        resolveService(result, options.response);
-      })
-      .catch((error) => {
-        rejectService(error, options);
-      });
+    try {
+      const _result = await result;
+
+      return resolveService(_result, response, statusCode);
+    } catch (error) {
+      return rejectService(error, options);
+    }
   }
 
-  return Promise.resolve(options.response.status(HttpCode.Ok).json(result));
+  return options.response.status(HttpCode.Ok).json(result);
 }
 
 export function createService(options: ServiceOptions): Express {
-  return (request: Request, response: Response) =>
-    createHttpService({ ...options, request, response }).then(() => {
+  return async (request: Request, response: Response) => {
+    await createHttpService({ ...options, request, response });
+
+    try {
       options.clousures?.forEach((clousure) => {
         clousure(request, response);
       });
-    });
+    } catch {
+      // Capture error to avoid critical failure
+    }
+  };
 }

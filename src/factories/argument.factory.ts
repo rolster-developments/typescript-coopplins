@@ -3,7 +3,7 @@ import createFromInvertly from '@rolster/invertly';
 import { Request } from 'express';
 import { getContextFromRequest } from '../context';
 import { Arguments } from '../enums';
-import { requestArgument } from '../stores';
+import { requestArgument } from '../stores/arguments.store';
 import { ArgumentsDataType } from '../types';
 
 function resolveValue(value: any, dataType?: ArgumentsDataType): any {

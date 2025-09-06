@@ -1,13 +1,14 @@
 import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response, Router } from 'express';
+import { createHttpArguments } from './factories/argument.factory';
 import {
-  createService,
-  createHttpArguments,
   createMiddleware,
-  createMiddlewares,
-  createRoute
-} from './factories';
-import { requestController, requestRoutes } from './stores';
+  createMiddlewares
+} from './factories/middleware.factory';
+import { createRoute } from './factories/route.factory';
+import { createService } from './factories/service.factory';
+import { requestController } from './stores/controller.store';
+import { requestRoutes } from './stores/route.store';
 import { ClousureToken, MiddlewareToken } from './types';
 
 type Controller = Record<string | symbol, Function>;
@@ -25,22 +26,23 @@ interface ControllerOptions {
   key: string | symbol;
   catchError?: (error: any) => void;
   clousures?: ClousureToken[];
+  statusCode?: number;
 }
 
 function createRouter(middlewares: MiddlewareToken[]): Router {
   const router = express.Router({ mergeParams: true });
 
   for (const middleware of middlewares) {
-    createMiddleware(middleware).present((call) => {
-      router.use(call);
-    });
+    const optional = createMiddleware(middleware);
+
+    optional.isPresent() && router.use(optional.get());
   }
 
   return router;
 }
 
 function createController(options: ControllerOptions): Resolver {
-  const { controller, key, catchError, clousures } = options;
+  const { controller, key, catchError, clousures, statusCode } = options;
 
   return createService({
     service: (request: Request, response: Response) => {
@@ -51,7 +53,8 @@ function createController(options: ControllerOptions): Resolver {
       return resolver(...[...args, request, response]);
     },
     clousures,
-    catchError
+    catchError,
+    statusCode
   });
 }
 
@@ -66,7 +69,7 @@ export function registerControllers(options: ControllersOptions): void {
       const router = createRouter(middlewares);
 
       for (const routeOptions of routesOptions) {
-        const { http, middlewares, key, path } = routeOptions;
+        const { http, middlewares, key, path, statusCode } = routeOptions;
 
         const route = createRoute(router, http);
 
@@ -76,7 +79,8 @@ export function registerControllers(options: ControllersOptions): void {
             controller,
             key,
             clousures,
-            catchError
+            catchError,
+            statusCode
           })
         ]);
       }

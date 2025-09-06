@@ -1,7 +1,7 @@
 import { Optional } from '@rolster/commons';
 import createFromInvertly from '@rolster/invertly';
 import { Request, Response } from 'express';
-import { itIsDefinedClousure } from '../stores';
+import { isDefinedClousure } from '../stores/clousure.store';
 import { ClousureRoute, ClousureToken, OnClousure } from '../types';
 
 function itIsOnClousure(clousure: any): clousure is OnClousure {
@@ -9,7 +9,7 @@ function itIsOnClousure(clousure: any): clousure is OnClousure {
 }
 
 export function createClousure(token: ClousureToken): Optional<ClousureRoute> {
-  if (!itIsDefinedClousure(token)) {
+  if (!isDefinedClousure(token)) {
     return Optional.of((req: Request, res: Response) => {
       token(req, res);
     });

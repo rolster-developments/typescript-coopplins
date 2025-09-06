@@ -1,11 +1,12 @@
 import { HttpMethod } from '../enums';
-import { registerRoutes } from '../stores';
+import { registerRoutes } from '../stores/route.store';
 import { MiddlewareToken } from '../types';
 
 interface RouteOptions {
   http: HttpMethod;
   middlewares: MiddlewareToken[];
   path: string;
+  statusCode?: number;
 }
 
 type Options = Omit<RouteOptions, 'http' | 'path'>;
@@ -16,10 +17,8 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 function createRoute(options: RouteOptions): MethodDecorator {
-  const { http, middlewares, path } = options;
-
   return ({ constructor }, key) => {
-    registerRoutes(constructor, { http, key, middlewares, path });
+    registerRoutes(constructor, { ...options, key });
   };
 }
 

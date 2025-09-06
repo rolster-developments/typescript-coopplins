@@ -1,7 +1,7 @@
 class Middlewares {
   private collection: Function[] = [];
 
-  public itIsDefined(middleware: Function): boolean {
+  public isDefined(middleware: Function): boolean {
     return this.collection.includes(middleware);
   }
 
@@ -12,8 +12,8 @@ class Middlewares {
 
 const middlewares = new Middlewares();
 
-export function itIsDefinedMiddleware(middleware: Function): boolean {
-  return middlewares.itIsDefined(middleware);
+export function isDefinedMiddleware(middleware: Function): boolean {
+  return middlewares.isDefined(middleware);
 }
 
 export function registerMiddleware(middleware: Function): void {

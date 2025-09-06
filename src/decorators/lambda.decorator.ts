@@ -1,6 +1,6 @@
 import { registerInjectable } from '@rolster/invertly';
-import { HttpMethod } from '../enums';
-import { registerLambda } from '../stores';
+import { HttpCode, HttpMethod } from '../enums';
+import { registerLambda } from '../stores/lambda.store';
 import { LambdaOptions, MiddlewareToken } from '../types';
 
 function createLambda(options: LambdaOptions): ClassDecorator {
@@ -17,35 +17,65 @@ function createLambda(options: LambdaOptions): ClassDecorator {
 
 export function LambdaPost(
   path = '/',
-  middlewares: MiddlewareToken[] = []
+  middlewares: MiddlewareToken[] = [],
+  statusCode = HttpCode.Ok
 ): ClassDecorator {
-  return createLambda({ path, middlewares, http: HttpMethod.Post });
+  return createLambda({
+    http: HttpMethod.Post,
+    middlewares,
+    path,
+    statusCode
+  });
 }
 
 export function LambdaGet(
   path = '/',
-  middlewares: MiddlewareToken[] = []
+  middlewares: MiddlewareToken[] = [],
+  statusCode = HttpCode.Ok
 ): ClassDecorator {
-  return createLambda({ path, middlewares, http: HttpMethod.Get });
+  return createLambda({
+    http: HttpMethod.Get,
+    middlewares,
+    path,
+    statusCode
+  });
 }
 
 export function LambdaPut(
   path = '/',
-  middlewares: MiddlewareToken[] = []
+  middlewares: MiddlewareToken[] = [],
+  statusCode = HttpCode.Ok
 ): ClassDecorator {
-  return createLambda({ path, middlewares, http: HttpMethod.Put });
+  return createLambda({
+    http: HttpMethod.Put,
+    middlewares,
+    path,
+    statusCode
+  });
 }
 
 export function LambdaDelete(
   path = '/',
-  middlewares: MiddlewareToken[] = []
+  middlewares: MiddlewareToken[] = [],
+  statusCode = HttpCode.Ok
 ): ClassDecorator {
-  return createLambda({ path, middlewares, http: HttpMethod.Delete });
+  return createLambda({
+    http: HttpMethod.Delete,
+    middlewares,
+    path,
+    statusCode
+  });
 }
 
 export function LambdaPatch(
   path = '/',
-  middlewares: MiddlewareToken[] = []
+  middlewares: MiddlewareToken[] = [],
+  statusCode = HttpCode.Ok
 ): ClassDecorator {
-  return createLambda({ path, middlewares, http: HttpMethod.Patch });
+  return createLambda({
+    http: HttpMethod.Patch,
+    middlewares,
+    path,
+    statusCode
+  });
 }

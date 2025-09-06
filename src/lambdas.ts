@@ -1,13 +1,11 @@
 import createFromInvertly from '@rolster/invertly';
 import express, { Express, Request, Response } from 'express';
 import { getContextFromRequest } from './context';
-import {
-  createHttpArguments,
-  createRoute,
-  createMiddlewares,
-  createService
-} from './factories';
-import { requestLambda } from './stores';
+import { createHttpArguments } from './factories/argument.factory';
+import { createMiddlewares } from './factories/middleware.factory';
+import { createRoute } from './factories/route.factory';
+import { createService } from './factories/service.factory';
+import { requestLambda } from './stores/lambda.store';
 import { ClousureToken } from './types';
 
 type RouteCallback = (request: Request, response: Response) => Promise<any>;
@@ -23,10 +21,11 @@ interface LambdaOptions {
   token: Function;
   catchError?: (error: any) => void;
   clousures?: ClousureToken[];
+  statusCode?: number;
 }
 
 function createLambda(options: LambdaOptions): RouteCallback {
-  const { token, catchError, clousures } = options;
+  const { token, catchError, clousures, statusCode } = options;
 
   return createService({
     service: (request: Request, response: Response) => {
@@ -45,7 +44,8 @@ function createLambda(options: LambdaOptions): RouteCallback {
       return resolver(...[...args, request, response]);
     },
     clousures,
-    catchError
+    catchError,
+    statusCode
   });
 }
 
@@ -54,7 +54,7 @@ export function registerLambdas(options: LambdasOptions): void {
 
   for (const token of lambdas) {
     requestLambda(token).present((options) => {
-      const { http, middlewares, path } = options;
+      const { http, middlewares, path, statusCode } = options;
 
       const router = express.Router({ mergeParams: true });
 
@@ -62,7 +62,7 @@ export function registerLambdas(options: LambdasOptions): void {
 
       route('/', [
         ...createMiddlewares(middlewares),
-        createLambda({ token, clousures, catchError })
+        createLambda({ token, clousures, catchError, statusCode })
       ]);
 
       server.use(path, router); // Register in server

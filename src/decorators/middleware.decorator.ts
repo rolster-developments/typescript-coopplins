@@ -1,5 +1,5 @@
 import { registerInjectable } from '@rolster/invertly';
-import { registerMiddleware } from '../stores';
+import { registerMiddleware } from '../stores/middlerare.store';
 
 interface MiddlewareOptions {
   scopeable?: boolean;

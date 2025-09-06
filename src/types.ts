@@ -32,6 +32,7 @@ export interface LambdaOptions {
   http: HttpMethod;
   middlewares: MiddlewareToken[];
   path: string;
+  statusCode?: number;
 }
 
 export type ClousureToken = Function;
@@ -46,6 +47,7 @@ export type RouteOptions = {
   key: string | symbol;
   middlewares: MiddlewareToken[];
   path: string;
+  statusCode?: number;
 };
 
 export class Result<S, F, V = any> extends Sealed<

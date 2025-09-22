@@ -38,6 +38,12 @@ export interface LambdaOptions {
 export type ClousureToken = Function;
 export type ClousureRoute = (request: Request, response: Response) => void;
 
+export type CatchError<T = any> = (
+  error: T,
+  request: Request,
+  response: Response
+) => void;
+
 export interface OnClousure {
   onClousure: (request: Request, response: Response) => void;
 }

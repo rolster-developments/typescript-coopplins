@@ -6,20 +6,20 @@ import { createMiddlewares } from './factories/middleware.factory';
 import { createRoute } from './factories/route.factory';
 import { createService } from './factories/service.factory';
 import { requestLambda } from './stores/lambda.store';
-import { ClousureToken } from './types';
+import { CatchError, ClousureToken } from './types';
 
 type RouteCallback = (request: Request, response: Response) => Promise<any>;
 
 interface LambdasOptions {
   lambdas: Function[];
   server: Express;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
 }
 
 interface LambdaOptions {
   token: Function;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
   statusCode?: number;
 }

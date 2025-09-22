@@ -9,7 +9,7 @@ import { createRoute } from './factories/route.factory';
 import { createService } from './factories/service.factory';
 import { requestController } from './stores/controller.store';
 import { requestRoutes } from './stores/route.store';
-import { ClousureToken, MiddlewareToken } from './types';
+import { CatchError, ClousureToken, MiddlewareToken } from './types';
 
 type Controller = Record<string | symbol, Function>;
 type Resolver = (request: Request, response: Response) => Promise<any>;
@@ -17,14 +17,14 @@ type Resolver = (request: Request, response: Response) => Promise<any>;
 interface ControllersOptions {
   controllers: Function[];
   server: Express;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
 }
 
 interface ControllerOptions {
   controller: Controller;
   key: string | symbol;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
   statusCode?: number;
 }

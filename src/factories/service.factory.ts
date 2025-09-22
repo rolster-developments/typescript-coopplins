@@ -1,7 +1,13 @@
 import { Request, Response } from 'express';
 import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
-import { ClousureToken, MiddlewareToken, Result, ResultServer } from '../types';
+import {
+  CatchError,
+  ClousureToken,
+  MiddlewareToken,
+  Result,
+  ResultServer
+} from '../types';
 
 const message = 'An error occurred during the execution of the process';
 const errorCode = HttpCode.InternalServerError;
@@ -15,7 +21,7 @@ type Service = (
 
 interface ServiceOptions {
   service: Service;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
   middlewares?: MiddlewareToken[];
   statusCode?: number;
@@ -46,9 +52,9 @@ function resolveService(
 }
 
 function rejectService(error: any, options: HttpServiceOptions): void {
-  const { catchError, response } = options;
+  const { catchError, request, response } = options;
 
-  catchError && catchError(error);
+  catchError && catchError(error, request, response);
 
   if (error instanceof CoopplinsError) {
     response

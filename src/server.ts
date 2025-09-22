@@ -5,7 +5,7 @@ import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import { registerControllers } from './controllers';
 import { registerLambdas } from './lambdas';
-import { ClousureToken } from './types';
+import { CatchError, ClousureToken } from './types';
 
 type Options = Partial<DotenvConfigOptions>;
 
@@ -17,7 +17,7 @@ interface SentryOptions {
 interface CoopplinsOptions {
   afterAll?: () => void;
   beforeAll?: () => Promise<void>;
-  catchError?: (error: any) => void;
+  catchError?: CatchError;
   clousures?: ClousureToken[];
   controllers?: Function[];
   handlers?: RequestHandler[];

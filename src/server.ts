@@ -73,6 +73,12 @@ class Coopplins {
 export function environment<T = string>(key: string, options?: Options): T {
   dotenv.config(options);
 
+  const value = process.env[key];
+
+  if (value === undefined || value === null) {
+    return undefined as T;
+  }
+
   return parse<T>(String(process.env[key]));
 }
 

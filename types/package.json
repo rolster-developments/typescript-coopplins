@@ -1,8 +1,17 @@
 {
   "name": "@rolster/coopplins-server/types",
   "types": "../dist/esm/types.d.ts",
-  "main": "../dist/cjs/types.js",
+  "main": "../dist/esm/types.js",
   "module": "../dist/esm/types.js",
-  "unpkg": "../dist/es/types.js",
+  "exports": {
+    ".": {
+      "types": "../dist/esm/types.d.ts",
+      "node": {
+        "require": "../dist/cjs/types.js",
+        "import": "../dist/esm/types.js"
+      },
+      "default": "../dist/esm/types.js"
+    }
+  },
   "sideEffects": false
 }

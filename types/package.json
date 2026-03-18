@@ -1,7 +1,7 @@
 {
   "name": "@rolster/coopplins-server/types",
   "types": "../dist/esm/types.d.ts",
-  "main": "../dist/esm/types.js",
+  "main": "../dist/cjs/types.js",
   "module": "../dist/esm/types.js",
   "exports": {
     ".": {

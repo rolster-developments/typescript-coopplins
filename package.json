@@ -1,35 +1,35 @@
 {
   "name": "@rolster/coopplins-server",
-  "version": "5.7.1",
+  "version": "5.7.2",
   "type": "module",
   "description": "Package that contains a working environment to develop web applications and API's.",
   "license": "MIT",
   "author": "Rolster Technology <rolster.developments@gmail.com>",
   "contributors": [
     {
-      "name": "Daniel Andrés Castillo Pedroza",
+      "name": "Daniel AndrÃ©s Castillo Pedroza",
       "email": "ing.dacastillop@gmail.com"
     }
   ],
   "types": "./dist/esm/index.d.ts",
   "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.js",
+  "module": "./dist/es/index.mjs",
   "exports": {
     ".": {
       "types": "./dist/esm/index.d.ts",
       "node": {
         "require": "./dist/cjs/index.cjs",
-        "import": "./dist/esm/index.js"
+        "import": "./dist/es/index.mjs"
       },
-      "default": "./dist/esm/index.js"
+      "default": "./dist/es/index.mjs"
     },
     "./types": {
       "types": "./dist/esm/types.d.ts",
       "node": {
         "require": "./dist/cjs/types.cjs",
-        "import": "./dist/esm/types.js"
+        "import": "./dist/es/types.mjs"
       },
-      "default": "./dist/esm/types.js"
+      "default": "./dist/es/types.mjs"
     }
   },
   "files": [
@@ -44,8 +44,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@rolster/commons": "^4.1.0",
-    "@rolster/invertly": "^4.2.1",
+    "@rolster/commons": "^4.1.2",
+    "@rolster/invertly": "^4.2.2",
     "@sentry/node": "^10.10.0",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
@@ -53,16 +53,16 @@
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@rolster/rollup": "^2.0.0",
-    "@rolster/types": "^1.1.0",
+    "@rolster/rollup": "^2.1.0",
+    "@rolster/types": "^1.1.1",
     "@types/express": "^5.0.6",
-    "@vitest/ui": "^3.2.4",
+    "@vitest/ui": "^4.1.8",
     "jsdom": "^27.0.0",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.3",
     "tslib": "^2.4.0",
-    "typescript": "^5.7.2",
-    "vitest": "^3.2.4"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
   },
   "repository": {
     "type": "git",
@@ -80,6 +80,6 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=14.13"
+    "node": ">=22"
   }
 }

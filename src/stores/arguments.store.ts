@@ -1,4 +1,5 @@
 import { SecureMap } from '@rolster/commons';
+
 import { ArgumentsOptions } from '../types';
 
 type Token = string | symbol;

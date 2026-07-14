@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
 import {
@@ -28,8 +29,8 @@ interface ServiceOptions {
 }
 
 interface HttpServiceOptions extends ServiceOptions {
-  response: Response;
   request: Request;
+  response: Response;
 }
 
 function resolveService(

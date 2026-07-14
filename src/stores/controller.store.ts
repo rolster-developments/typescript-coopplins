@@ -1,4 +1,5 @@
 import { Optional } from '@rolster/commons';
+
 import { ControllerOptions } from '../types';
 
 class Controllers {

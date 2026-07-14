@@ -1,4 +1,5 @@
 import { registerInjectable } from '@rolster/invertly';
+
 import { registerController } from '../stores/controller.store';
 import { MiddlewareToken } from '../types';
 

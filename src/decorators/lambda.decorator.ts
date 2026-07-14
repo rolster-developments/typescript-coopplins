@@ -1,4 +1,5 @@
 import { registerInjectable } from '@rolster/invertly';
+
 import { HttpCode, HttpMethod } from '../enums';
 import { registerLambda } from '../stores/lambda.store';
 import { LambdaOptions, MiddlewareToken } from '../types';

@@ -2,6 +2,6 @@ import { Router } from 'express';
 
 import { HttpMethod } from '../enums';
 
-export function createRoute(router: Router, http: HttpMethod): Function {
-  return (router as unknown as Record<string, Function>)[http].bind(router);
+export function routeAPI(router: Router, method: HttpMethod): Function {
+  return router[method].bind(router);
 }

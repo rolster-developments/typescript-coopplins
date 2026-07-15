@@ -6,7 +6,7 @@ import {
   createMiddleware,
   createMiddlewares
 } from './factories/middleware.factory';
-import { createRoute } from './factories/route.factory';
+import { routeAPI } from './factories/route.factory';
 import { createService } from './factories/service.factory';
 import { requestController } from './stores/controller.store';
 import { requestRoutes } from './stores/route.store';
@@ -74,9 +74,9 @@ export function registerControllers(options: ControllersOptions): void {
       for (const routeOptions of routesOptions) {
         const { http, middlewares, key, path, statusCode } = routeOptions;
 
-        const route = createRoute(router, http);
+        const api = routeAPI(router, http);
 
-        route(path, [
+        api(path, [
           ...createMiddlewares(middlewares),
           createController({
             controller,

@@ -23,9 +23,9 @@ export enum HttpCode {
 
 export enum HttpMethod {
   Post = 'post',
-  Query = 'query',
   Put = 'put',
   Patch = 'patch',
+  Query = 'query',
   Get = 'get',
   Delete = 'delete',
   Options = 'options'

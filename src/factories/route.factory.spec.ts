@@ -1,14 +1,14 @@
 import { Router } from 'express';
 
 import { HttpMethod } from '../enums';
-import { createRoute } from './route.factory';
+import { routeAPI } from './route.factory';
 
-describe('createRoute', () => {
+describe('routeAPI', () => {
   it('should return the router method bound to the router', () => {
     const router = Router();
     const getSpy = vi.spyOn(router, 'get');
 
-    const route = createRoute(router, HttpMethod.Get);
+    const route = routeAPI(router, HttpMethod.Get);
 
     route('/test', [() => {}]);
 
@@ -19,7 +19,7 @@ describe('createRoute', () => {
     const router = Router();
     const postSpy = vi.spyOn(router, 'post');
 
-    const route = createRoute(router, HttpMethod.Post);
+    const route = routeAPI(router, HttpMethod.Post);
 
     route('/test', [() => {}]);
 
@@ -30,7 +30,7 @@ describe('createRoute', () => {
     const router = Router();
     const putSpy = vi.spyOn(router, 'put');
 
-    const route = createRoute(router, HttpMethod.Put);
+    const route = routeAPI(router, HttpMethod.Put);
 
     route('/test', [() => {}]);
 
@@ -41,7 +41,7 @@ describe('createRoute', () => {
     const router = Router();
     const deleteSpy = vi.spyOn(router, 'delete');
 
-    const route = createRoute(router, HttpMethod.Delete);
+    const route = routeAPI(router, HttpMethod.Delete);
 
     route('/test', [() => {}]);
 

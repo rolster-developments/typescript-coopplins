@@ -88,7 +88,7 @@ describe('createService', () => {
   });
 
   it('should call catchError when provided', async () => {
-    const { request, response, status, json } = mockReqRes();
+    const { request, response, status } = mockReqRes();
     const catchError = vi.fn();
 
     const handler = createService({

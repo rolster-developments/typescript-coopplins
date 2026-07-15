@@ -4,7 +4,7 @@ import express, { Express, Request, Response } from 'express';
 import { contextOfRequest } from './context';
 import { createHttpArguments } from './factories/argument.factory';
 import { createMiddlewares } from './factories/middleware.factory';
-import { createRoute } from './factories/route.factory';
+import { routeAPI } from './factories/route.factory';
 import { createService } from './factories/service.factory';
 import { requestLambda } from './stores/lambda.store';
 import { CatchError, ClousureToken } from './types';
@@ -59,9 +59,9 @@ export function registerLambdas(options: LambdasOptions): void {
 
       const router = express.Router({ mergeParams: true });
 
-      const route = createRoute(router, http);
+      const api = routeAPI(router, http);
 
-      route('/', [
+      api('/', [
         ...createMiddlewares(middlewares),
         createLambda({ token, clousures, catchError, statusCode })
       ]);

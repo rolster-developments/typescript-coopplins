@@ -23,6 +23,7 @@ export enum HttpCode {
 
 export enum HttpMethod {
   Post = 'post',
+  Query = 'query',
   Put = 'put',
   Patch = 'patch',
   Get = 'get',

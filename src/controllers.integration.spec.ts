@@ -157,7 +157,11 @@ describe('registerControllers (integration)', () => {
     class NoMiddlewareMethod {}
 
     registerMiddleware(NoMiddlewareMethod);
-    registerInjectable({ token: NoMiddlewareMethod });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: NoMiddlewareMethod
+    });
 
     @Controller('/api', [NoMiddlewareMethod])
     class TestController {

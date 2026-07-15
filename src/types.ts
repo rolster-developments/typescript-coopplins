@@ -1,5 +1,5 @@
 import { Sealed } from '@rolster/commons';
-import { InjectableToken } from '@rolster/invertly';
+import { InjectToken } from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import { ValidationChain } from 'express-validator';
@@ -14,7 +14,7 @@ export type ArgumentsOptions = {
   type: Arguments;
   dataType?: ArgumentsDataType;
   key?: string;
-  token?: InjectableToken;
+  token?: InjectToken;
 };
 
 export type MiddlewareToken = Function | RequestHandler | ValidationChain[];

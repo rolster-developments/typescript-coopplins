@@ -21,13 +21,17 @@ describe('createClousure', () => {
 
   it('should instantiate a registered clousure class', () => {
     class TestClousure {
-      public clousure(req: any, res: any) {
+      public clousure(_req: any, _res: any) {
         // no-op
       }
     }
 
     registerClousure(TestClousure);
-    registerInjectable({ token: TestClousure });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: TestClousure
+    });
 
     const result = createClousure(TestClousure);
 
@@ -38,7 +42,11 @@ describe('createClousure', () => {
     class NoClousureMethod {}
 
     registerClousure(NoClousureMethod);
-    registerInjectable({ token: NoClousureMethod });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: NoClousureMethod
+    });
 
     const result = createClousure(NoClousureMethod);
 
@@ -60,7 +68,11 @@ describe('createClousures', () => {
     class NoClousure {}
 
     registerClousure(NoClousure);
-    registerInjectable({ token: NoClousure });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: NoClousure
+    });
 
     const clousures = createClousures([NoClousure]);
 

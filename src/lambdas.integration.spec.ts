@@ -13,7 +13,11 @@ describe('registerLambdas (integration)', () => {
       }
     }
 
-    registerInjectable({ token: TestLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: TestLambda
+    });
 
     const server = express();
     const useSpy = vi.spyOn(server, 'use');
@@ -30,7 +34,11 @@ describe('registerLambdas (integration)', () => {
     @LambdaPost('/no-execute')
     class NoExecuteLambda {}
 
-    registerInjectable({ token: NoExecuteLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: NoExecuteLambda
+    });
 
     const server = express();
     const useSpy = vi.spyOn(server, 'use');
@@ -58,8 +66,16 @@ describe('registerLambdas (integration)', () => {
       }
     }
 
-    registerInjectable({ token: FirstLambda });
-    registerInjectable({ token: SecondLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: FirstLambda
+    });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: SecondLambda
+    });
 
     const server = express();
     const useSpy = vi.spyOn(server, 'use');
@@ -80,7 +96,7 @@ describe('registerLambdas (integration)', () => {
       }
     }
 
-    registerInjectable({ token: ErrLambda });
+    registerInjectable({ scopeable: true, singleton: false, token: ErrLambda });
 
     const server = express();
     const catchError = vi.fn();
@@ -102,7 +118,7 @@ describe('registerLambdas (integration)', () => {
       }
     }
 
-    registerInjectable({ token: ClLambda });
+    registerInjectable({ scopeable: true, singleton: false, token: ClLambda });
 
     const server = express();
     const clousure = vi.fn();
@@ -124,7 +140,11 @@ describe('registerLambdas (integration)', () => {
       }
     }
 
-    registerInjectable({ token: StatusLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: StatusLambda
+    });
 
     const server = express();
     const useSpy = vi.spyOn(server, 'use');

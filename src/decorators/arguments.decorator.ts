@@ -1,4 +1,4 @@
-import { InjectableToken } from '@rolster/invertly';
+import { InjectToken } from '@rolster/invertly';
 
 import { Arguments } from '../enums';
 import { registerArgument } from '../stores/arguments.store';
@@ -26,7 +26,7 @@ function createParameter(options: ParameterOptions): Decorator {
   };
 }
 
-export function Inject(token: InjectableToken): Decorator {
+export function Inject(token: InjectToken): Decorator {
   return ({ constructor }, name, index) => {
     if (name) {
       registerArgument(constructor, {

@@ -15,7 +15,11 @@ describe('Lambdas E2E', () => {
       }
     }
 
-    registerInjectable({ token: TestLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: TestLambda
+    });
 
     const app = express();
     registerLambdas({ lambdas: [TestLambda], server: app });
@@ -63,7 +67,11 @@ describe('Lambdas E2E', () => {
       }
     }
 
-    registerInjectable({ token: TestLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: TestLambda
+    });
 
     const app = express();
     registerLambdas({ lambdas: [TestLambda], server: app });
@@ -107,7 +115,11 @@ describe('Lambdas E2E', () => {
     @LambdaGet('/noop')
     class NoopLambda {}
 
-    registerInjectable({ token: NoopLambda });
+    registerInjectable({
+      scopeable: true,
+      singleton: false,
+      token: NoopLambda
+    });
 
     const app = express();
     registerLambdas({ lambdas: [NoopLambda], server: app });

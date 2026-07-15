@@ -33,13 +33,17 @@ describe('createMiddleware', () => {
 
   it('should instantiate a registered middleware class', () => {
     class TestMiddleware {
-      public middleware(req: any, res: any, next: any) {
+      public middleware(_req: any, _res: any, next: any) {
         next();
       }
     }
 
     registerMiddleware(TestMiddleware);
-    registerInjectable({ token: TestMiddleware });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: TestMiddleware
+    });
 
     const result = createMiddleware(TestMiddleware);
 
@@ -61,7 +65,11 @@ describe('createMiddlewares', () => {
     class NoMiddleware {}
 
     registerMiddleware(NoMiddleware);
-    registerInjectable({ token: NoMiddleware });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: NoMiddleware
+    });
 
     const middlewares = createMiddlewares([NoMiddleware]);
 

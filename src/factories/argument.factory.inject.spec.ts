@@ -16,7 +16,11 @@ describe('createHttpArguments - Inject', () => {
       public execute() {}
     }
 
-    registerInjectable({ token: TestService });
+    registerInjectable({
+      scopeable: false,
+      singleton: false,
+      token: TestService
+    });
 
     registerArgument(TestController, {
       index: 0,
@@ -26,7 +30,7 @@ describe('createHttpArguments - Inject', () => {
     });
 
     const context = new Context();
-    context.save(TestService, new TestService());
+    context.save('TestService', new TestService());
 
     const controller = new TestController();
     const request = { context_rolster: context } as any;

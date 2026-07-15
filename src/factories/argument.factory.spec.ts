@@ -78,7 +78,7 @@ describe('createHttpArguments', () => {
     registerArgument(TestController, {
       index: 0,
       name: 'execute',
-      type: Arguments.Query,
+      type: Arguments.QueryParams,
       key: 'page',
       dataType: 'string'
     });
@@ -94,7 +94,7 @@ describe('createHttpArguments', () => {
     registerArgument(TestController, {
       index: 0,
       name: 'execute',
-      type: Arguments.Query,
+      type: Arguments.QueryParams,
       key: 'active',
       dataType: 'boolean'
     });
@@ -110,7 +110,7 @@ describe('createHttpArguments', () => {
     registerArgument(TestController, {
       index: 0,
       name: 'execute',
-      type: Arguments.Query,
+      type: Arguments.QueryParams,
       key: 'count',
       dataType: 'number'
     });

@@ -20,10 +20,7 @@ describe('registerLambdas', () => {
       server
     });
 
-    expect(useSpy).toHaveBeenCalledWith(
-      '/my-lambda',
-      expect.any(Function)
-    );
+    expect(useSpy).toHaveBeenCalledWith('/my-lambda', expect.any(Function));
   });
 
   it('should handle catchError option', () => {

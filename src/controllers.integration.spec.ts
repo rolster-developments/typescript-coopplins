@@ -3,16 +3,18 @@ import { NextFunction, Request, Response } from 'express';
 
 import { Controller } from './decorators/controller.decorator';
 import { Get, Post } from './decorators/route.decorator';
-import { Body, Path, Query } from './decorators/arguments.decorator';
+import { Body, Path, QueryParams } from './decorators/arguments.decorator';
 import { registerControllers } from './controllers';
 import { registerMiddleware } from './stores/middlerare.store';
 import { registerInjectable } from '@rolster/invertly';
 
 describe('registerControllers (integration)', () => {
   it('should handle controller-level middlewares', () => {
-    const middleware = vi.fn((_req: Request, _res: Response, next: NextFunction) => {
-      next();
-    });
+    const middleware = vi.fn(
+      (_req: Request, _res: Response, next: NextFunction) => {
+        next();
+      }
+    );
 
     @Controller('/api', [middleware])
     class TestController {
@@ -58,7 +60,10 @@ describe('registerControllers (integration)', () => {
     @Controller('/api')
     class TestController {
       @Get('/users/:id')
-      public getUser(@Path('id') _id: string, @Query('fields') _fields: string) {
+      public getUser(
+        @Path('id') _id: string,
+        @QueryParams('fields') _fields: string
+      ) {
         return { id: _id, fields: _fields };
       }
     }

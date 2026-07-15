@@ -1,9 +1,6 @@
 import { registerInjectable } from '@rolster/invertly';
 
-import {
-  createMiddleware,
-  createMiddlewares
-} from './middleware.factory';
+import { createMiddleware, createMiddlewares } from './middleware.factory';
 import { registerMiddleware } from '../stores/middlerare.store';
 
 describe('createMiddleware', () => {

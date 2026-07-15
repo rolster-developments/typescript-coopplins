@@ -2,7 +2,7 @@ export enum Arguments {
   Body = 'body',
   Header = 'header',
   Path = 'path',
-  Query = 'query',
+  QueryParams = 'queryParams',
   Inject = 'inject'
 }
 
@@ -23,9 +23,9 @@ export enum HttpCode {
 
 export enum HttpMethod {
   Post = 'post',
-  Get = 'get',
   Put = 'put',
-  Delete = 'delete',
   Patch = 'patch',
+  Get = 'get',
+  Delete = 'delete',
   Options = 'options'
 }

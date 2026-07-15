@@ -2,13 +2,13 @@ import { InjectableToken } from '@rolster/invertly';
 
 import { Arguments } from '../enums';
 import { registerArgument } from '../stores/arguments.store';
-import { ArgumentsDataType as DataType } from '../types';
+import { ArgumentsDataType } from '../types';
 
 type Decorator = ParameterDecorator;
 
 interface ParameterOptions {
   type: Arguments;
-  dataType?: DataType;
+  dataType?: ArgumentsDataType;
   key?: string;
 }
 
@@ -43,7 +43,7 @@ export function Body(key?: string): Decorator {
   return createParameter({ key, type: Arguments.Body });
 }
 
-export function Header(key: string, dataType?: DataType): Decorator {
+export function Header(key: string, dataType?: ArgumentsDataType): Decorator {
   return createParameter({ dataType, key, type: Arguments.Header });
 }
 
@@ -55,7 +55,7 @@ export function HeaderNumber(key: string): Decorator {
   return Header(key, 'number');
 }
 
-export function Path(key: string, dataType?: DataType): Decorator {
+export function Path(key: string, dataType?: ArgumentsDataType): Decorator {
   return createParameter({ dataType, key, type: Arguments.Path });
 }
 
@@ -67,14 +67,17 @@ export function PathNumber(key: string): Decorator {
   return Path(key, 'number');
 }
 
-export function Query(key: string, dataType?: DataType): Decorator {
-  return createParameter({ dataType, key, type: Arguments.Query });
+export function QueryParams(
+  key: string,
+  dataType?: ArgumentsDataType
+): Decorator {
+  return createParameter({ dataType, key, type: Arguments.QueryParams });
 }
 
-export function QueryBool(key: string): Decorator {
-  return Query(key, 'boolean');
+export function QueryParamsBool(key: string): Decorator {
+  return QueryParams(key, 'boolean');
 }
 
-export function QueryNumber(key: string): Decorator {
-  return Query(key, 'number');
+export function QueryParamsNumber(key: string): Decorator {
+  return QueryParams(key, 'number');
 }

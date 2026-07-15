@@ -1,9 +1,6 @@
 import { registerInjectable } from '@rolster/invertly';
 
-import {
-  createClousure,
-  createClousures
-} from './clousure.factory';
+import { createClousure, createClousures } from './clousure.factory';
 import { registerClousure } from '../stores/clousure.store';
 
 describe('createClousure', () => {

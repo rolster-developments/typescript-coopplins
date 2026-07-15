@@ -45,7 +45,8 @@ describe('createService', () => {
     const { request, response, status, json } = mockReqRes();
 
     const handler = createService({
-      service: () => Promise.resolve(Result.failure({ statusCode: 400, data: 'bad' }))
+      service: () =>
+        Promise.resolve(Result.failure({ statusCode: 400, data: 'bad' }))
     });
 
     await handler(request, response);

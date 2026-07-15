@@ -1,9 +1,34 @@
-import { Body, Header, HeaderBool, HeaderNumber, Inject, Path, PathBool, PathNumber, Query, QueryBool, QueryNumber } from './decorators/arguments.decorator';
+import {
+  Body,
+  Header,
+  HeaderBool,
+  HeaderNumber,
+  Inject,
+  Path,
+  PathBool,
+  PathNumber,
+  QueryParams,
+  QueryParamsBool,
+  QueryParamsNumber
+} from './decorators/arguments.decorator';
 import { Clousure } from './decorators/closing.decorator';
 import { Controller } from './decorators/controller.decorator';
-import { LambdaDelete, LambdaGet, LambdaPatch, LambdaPost, LambdaPut } from './decorators/lambda.decorator';
+import {
+  LambdaDelete,
+  LambdaGet,
+  LambdaPatch,
+  LambdaPost,
+  LambdaPut
+} from './decorators/lambda.decorator';
 import { Middleware } from './decorators/middleware.decorator';
-import { Delete, Get, Options, Patch, Post, Put } from './decorators/route.decorator';
+import {
+  Delete,
+  Get,
+  Options,
+  Patch,
+  Post,
+  Put
+} from './decorators/route.decorator';
 import { Arguments, HttpMethod } from './enums';
 import { requestController } from './stores/controller.store';
 import { requestRoutes } from './stores/route.store';
@@ -205,22 +230,22 @@ describe('@PathNumber', () => {
   });
 });
 
-describe('@Query', () => {
+describe('@QueryParams', () => {
   it('should register a query argument', () => {
     class TestController {
-      public execute(@Query('page') _page: string) {}
+      public execute(@QueryParams('page') _page: string) {}
     }
 
     const args = requestArgument(TestController, 'execute');
-    expect(args[0].type).toBe(Arguments.Query);
+    expect(args[0].type).toBe(Arguments.QueryParams);
     expect(args[0].key).toBe('page');
   });
 });
 
-describe('@QueryBool', () => {
+describe('@QueryParamsBool', () => {
   it('should register a query argument with boolean dataType', () => {
     class TestController {
-      public execute(@QueryBool('active') _active: boolean) {}
+      public execute(@QueryParamsBool('active') _active: boolean) {}
     }
 
     const args = requestArgument(TestController, 'execute');
@@ -228,10 +253,10 @@ describe('@QueryBool', () => {
   });
 });
 
-describe('@QueryNumber', () => {
+describe('@QueryParamsNumber', () => {
   it('should register a query argument with number dataType', () => {
     class TestController {
-      public execute(@QueryNumber('page') _page: number) {}
+      public execute(@QueryParamsNumber('page') _page: number) {}
     }
 
     const args = requestArgument(TestController, 'execute');

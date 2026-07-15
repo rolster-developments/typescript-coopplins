@@ -28,10 +28,7 @@ describe('registerControllers', () => {
       server
     });
 
-    expect(useSpy).toHaveBeenCalledWith(
-      '/api',
-      expect.any(Function)
-    );
+    expect(useSpy).toHaveBeenCalledWith('/api', expect.any(Function));
   });
 
   it('should handle catchError option', () => {

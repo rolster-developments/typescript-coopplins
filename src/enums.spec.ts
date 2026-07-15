@@ -5,7 +5,7 @@ describe('Arguments', () => {
     expect(Arguments.Body).toBe('body');
     expect(Arguments.Header).toBe('header');
     expect(Arguments.Path).toBe('path');
-    expect(Arguments.Query).toBe('query');
+    expect(Arguments.QueryParams).toBe('queryParams');
     expect(Arguments.Inject).toBe('inject');
   });
 });
@@ -30,10 +30,11 @@ describe('HttpCode', () => {
 describe('HttpMethod', () => {
   it('should have correct HTTP methods', () => {
     expect(HttpMethod.Post).toBe('post');
-    expect(HttpMethod.Get).toBe('get');
+    expect(HttpMethod.Query).toBe('query');
     expect(HttpMethod.Put).toBe('put');
-    expect(HttpMethod.Delete).toBe('delete');
     expect(HttpMethod.Patch).toBe('patch');
+    expect(HttpMethod.Get).toBe('get');
+    expect(HttpMethod.Delete).toBe('delete');
     expect(HttpMethod.Options).toBe('options');
   });
 });

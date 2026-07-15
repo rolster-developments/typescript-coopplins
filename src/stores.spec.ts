@@ -2,28 +2,16 @@ import {
   registerController,
   requestController
 } from './stores/controller.store';
-import {
-  registerRoutes,
-  requestRoutes
-} from './stores/route.store';
-import {
-  registerLambda,
-  requestLambda
-} from './stores/lambda.store';
-import {
-  registerArgument,
-  requestArgument
-} from './stores/arguments.store';
-import {
-  existsClousure,
-  registerClousure
-} from './stores/clousure.store';
+import { registerRoutes, requestRoutes } from './stores/route.store';
+import { registerLambda, requestLambda } from './stores/lambda.store';
+import { registerArgument, requestArgument } from './stores/arguments.store';
+import { existsClousure, registerClousure } from './stores/clousure.store';
 import {
   existsMiddleware,
   registerMiddleware
 } from './stores/middlerare.store';
-import { HttpMethod } from './enums';
 import { Arguments } from './enums';
+import { HttpMethod } from './enums';
 
 describe('controller.store', () => {
   it('should register and request a controller', () => {

@@ -44,7 +44,7 @@ export function createHttpArguments(
       case Arguments.Path:
         values.push(key && resolveValue(request.params[key], dataType));
         break;
-      case Arguments.Query:
+      case Arguments.QueryParams:
         values.push(key && resolveValue(request.query[key], dataType));
         break;
       case Arguments.Inject:

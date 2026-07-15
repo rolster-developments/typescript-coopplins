@@ -26,6 +26,8 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-empty-function': 'off',
+      // Function-as-class-token is a deliberate design in this framework
+      '@typescript-eslint/no-unsafe-function-type': 'off',
       'simple-import-sort/imports': [
         'warn',
         {

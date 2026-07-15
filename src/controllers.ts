@@ -36,7 +36,9 @@ function createRouter(middlewares: MiddlewareToken[]): Router {
   for (const middleware of middlewares) {
     const optional = createMiddleware(middleware);
 
-    optional.isPresent() && router.use(optional.get());
+    if (optional.isPresent()) {
+      router.use(optional.get());
+    }
   }
 
   return router;

@@ -31,14 +31,20 @@ class Coopplins {
   constructor(private options: Partial<CoopplinsOptions>) {}
 
   public async start(port: number): Promise<void> {
-    this.options.sentryOptions && Sentry.init(this.options.sentryOptions);
+    if (this.options.sentryOptions) {
+      Sentry.init(this.options.sentryOptions);
+    }
 
     const server = express();
 
-    this.options.beforeAll && (await this.options.beforeAll());
+    if (this.options.beforeAll) {
+      await this.options.beforeAll();
+    }
 
     if (this.options.handlers) {
-      this.options.sentryOptions && Sentry.setupExpressErrorHandler(server);
+      if (this.options.sentryOptions) {
+        Sentry.setupExpressErrorHandler(server);
+      }
 
       for (const handler of this.options.handlers) {
         server.use(handler);
@@ -47,21 +53,23 @@ class Coopplins {
 
     server.set('trust proxy', this.options.trustProxy ?? false);
 
-    this.options.controllers &&
+    if (this.options.controllers) {
       registerControllers({
         catchError: this.options.catchError,
         clousures: this.options.clousures,
         controllers: this.options.controllers,
         server
       });
+    }
 
-    this.options.lambdas &&
+    if (this.options.lambdas) {
       registerLambdas({
         catchError: this.options.catchError,
         clousures: this.options.clousures,
         lambdas: this.options.lambdas,
         server
       });
+    }
 
     try {
       server.listen(port, this.options.afterAll);

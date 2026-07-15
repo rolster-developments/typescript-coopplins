@@ -2,15 +2,15 @@ import { Optional } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
 import { Request, Response } from 'express';
 
-import { isDefinedClousure } from '../stores/clousure.store';
-import { ClousureRoute, ClousureToken, OnClousure } from '../types';
+import { existsClousure } from '../stores/clousure.store';
+import { Clousure, ClousureRoute, ClousureToken } from '../types';
 
-function itIsOnClousure(clousure: any): clousure is OnClousure {
-  return typeof clousure['onClousure'] === 'function';
+function valueIsClousure(value: any): value is Clousure {
+  return typeof value['clousure'] === 'function';
 }
 
 export function createClousure(token: ClousureToken): Optional<ClousureRoute> {
-  if (!isDefinedClousure(token)) {
+  if (!existsClousure(token)) {
     return Optional.of((req: Request, res: Response) => {
       token(req, res);
     });
@@ -18,18 +18,20 @@ export function createClousure(token: ClousureToken): Optional<ClousureRoute> {
 
   const clousure = createFromInvertly({ token });
 
-  return itIsOnClousure(clousure)
+  return valueIsClousure(clousure)
     ? Optional.of((request: Request, response: Response) => {
-        clousure.onClousure(request, response);
+        clousure.clousure(request, response);
       })
     : Optional.empty();
 }
 
 export function createClousures(tokens: ClousureToken[]): ClousureRoute[] {
-  return tokens.reduce((clousures: ClousureRoute[], clousure) => {
-    createClousure(clousure).present((call) => {
-      clousures.push(call);
-    });
+  return tokens.reduce((clousures: ClousureRoute[], token) => {
+    const clousure = createClousure(token);
+
+    if (clousure.isPresent()) {
+      clousures.push(clousure.get());
+    }
 
     return clousures;
   }, []);

@@ -2,11 +2,11 @@ import { Optional } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
 
-import { isDefinedMiddleware } from '../stores/middlerare.store';
-import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
+import { existsMiddleware } from '../stores/middlerare.store';
+import { Middleware, MiddlewareRoute, MiddlewareToken } from '../types';
 
-function isOnMiddleware(middleware: any): middleware is OnMiddleware {
-  return typeof middleware['onMiddleware'] === 'function';
+function valueIsMiddleware(value: any): value is Middleware {
+  return typeof value['middleware'] === 'function';
 }
 
 type Route = Optional<MiddlewareRoute>;
@@ -17,7 +17,7 @@ export function createMiddleware(token: MiddlewareToken): Route {
     return Optional.of(token);
   }
 
-  if (!isDefinedMiddleware(token)) {
+  if (!existsMiddleware(token)) {
     return Optional.of((req: Request, res: Response, next: NextFunction) =>
       token(req, res, next)
     );
@@ -25,18 +25,20 @@ export function createMiddleware(token: MiddlewareToken): Route {
 
   const middleware = createFromInvertly({ token });
 
-  return isOnMiddleware(middleware)
+  return valueIsMiddleware(middleware)
     ? Optional.of((req: Request, res: Response, next: NextFunction) => {
-        return middleware.onMiddleware(req, res, next);
+        return middleware.middleware(req, res, next);
       })
     : Optional.empty();
 }
 
 export function createMiddlewares(tokens: MiddlewareToken[]): Routes {
-  return tokens.reduce((middlewares: Routes, middleware) => {
-    const optional = createMiddleware(middleware);
+  return tokens.reduce((middlewares: Routes, token) => {
+    const middleware = createMiddleware(token);
 
-    optional.isPresent() && middlewares.push(optional.get());
+    if (middleware.isPresent()) {
+      middlewares.push(middleware.get());
+    }
 
     return middlewares;
   }, []);

@@ -14,7 +14,7 @@ interface ParameterOptions {
 
 function createParameter(options: ParameterOptions): Decorator {
   return ({ constructor }, name, index) => {
-    name &&
+    if (name) {
       registerArgument(constructor, {
         dataType: options.dataType ?? 'string',
         index,
@@ -22,18 +22,20 @@ function createParameter(options: ParameterOptions): Decorator {
         name,
         type: options.type
       });
+    }
   };
 }
 
 export function Inject(token: InjectableToken): Decorator {
   return ({ constructor }, name, index) => {
-    name &&
+    if (name) {
       registerArgument(constructor, {
         index,
         token,
         name,
         type: Arguments.Inject
       });
+    }
   };
 }
 

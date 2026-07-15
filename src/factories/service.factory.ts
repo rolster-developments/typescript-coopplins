@@ -55,7 +55,9 @@ function resolveService(
 function rejectService(error: any, options: HttpServiceOptions): void {
   const { catchError, request, response } = options;
 
-  catchError && catchError(error, request, response);
+  if (catchError) {
+    catchError(error, request, response);
+  }
 
   if (error instanceof CoopplinsError) {
     response

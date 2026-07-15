@@ -1,6 +1,5 @@
 import { parse } from '@rolster/commons';
 import Sentry from '@sentry/node';
-
 import dotenv, { DotenvConfigOptions } from 'dotenv';
 import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';

@@ -1,6 +1,5 @@
 import { parseBoolean } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
-
 import { Request } from 'express';
 
 import { contextOfRequest } from '../context';

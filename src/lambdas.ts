@@ -1,5 +1,4 @@
 import { createFromInvertly } from '@rolster/invertly';
-
 import express, { Express, Request, Response } from 'express';
 
 import { contextOfRequest } from './context';

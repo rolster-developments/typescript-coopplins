@@ -1,5 +1,4 @@
 import { createFromInvertly } from '@rolster/invertly';
-
 import express, { Express, Request, Response, Router } from 'express';
 
 import { createHttpArguments } from './factories/argument.factory';

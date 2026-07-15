@@ -1,5 +1,4 @@
 import { Optional } from '@rolster/commons';
-
 import { LambdaOptions } from '../types';
 
 class Lambdas {

@@ -1,5 +1,4 @@
 import { SecureMap } from '@rolster/commons';
-
 import { RouteOptions } from '../types';
 
 type Routes = Map<string, RouteOptions>;

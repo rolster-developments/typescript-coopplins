@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-
 import { HttpCode } from '../enums';
 import { CoopplinsError } from '../exceptions';
 import {

@@ -1,5 +1,4 @@
 import { InjectToken } from '@rolster/invertly';
-
 import { Arguments } from '../enums';
 import { registerArgument } from '../stores/arguments.store';
 import { ArgumentsDataType } from '../types';

@@ -3,7 +3,6 @@ import Sentry from '@sentry/node';
 import dotenv, { DotenvConfigOptions } from 'dotenv';
 import express from 'express';
 import { RequestHandler } from 'express-serve-static-core';
-
 import { registerControllers } from './controllers';
 import { registerLambdas } from './lambdas';
 import { CatchError, ClousureToken } from './types';

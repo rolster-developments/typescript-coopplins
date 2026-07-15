@@ -1,7 +1,6 @@
 import { Optional } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
-
 import { existsMiddleware } from '../stores/middlerare.store';
 import { Middleware, MiddlewareRoute, MiddlewareToken } from '../types';
 

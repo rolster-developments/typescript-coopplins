@@ -3,7 +3,6 @@ import { InjectToken } from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import { ValidationChain } from 'express-validator';
-
 import { Arguments, HttpMethod } from './enums';
 
 export type ArgumentsDataType = 'string' | 'number' | 'boolean' | 'object';

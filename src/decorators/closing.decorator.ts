@@ -1,5 +1,4 @@
 import { registerInjectable } from '@rolster/invertly';
-
 import { registerClousure } from '../stores/clousure.store';
 
 interface ClousureOptions {

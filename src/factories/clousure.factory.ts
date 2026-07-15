@@ -1,7 +1,6 @@
 import { Optional } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
 import { Request, Response } from 'express';
-
 import { existsClousure } from '../stores/clousure.store';
 import { Clousure, ClousureRoute, ClousureToken } from '../types';
 

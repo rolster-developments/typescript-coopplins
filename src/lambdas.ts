@@ -1,6 +1,5 @@
 import { createFromInvertly } from '@rolster/invertly';
 import express, { Express, Request, Response } from 'express';
-
 import { contextOfRequest } from './context';
 import { createHttpArguments } from './factories/argument.factory';
 import { createMiddlewares } from './factories/middleware.factory';

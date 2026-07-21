@@ -19,7 +19,7 @@ export type ArgumentsOptions = {
 export type MiddlewareToken = Function | RequestHandler | ValidationChain[];
 export type MiddlewareRoute = RequestHandler | ValidationChain[];
 
-export interface Middleware {
+export interface OnMiddleware {
   middleware: (req: Request, res: Response, next: NextFunction) => any;
 }
 
@@ -44,7 +44,7 @@ export type CatchError<T = any> = (
   response: Response
 ) => void;
 
-export interface Clousure {
+export interface OnClousure {
   clousure: (request: Request, response: Response) => void;
 }
 

@@ -9,4 +9,4 @@ export * from './enums';
 export * from './exceptions';
 export * from './results';
 export { coopplins, environment } from './server';
-export { Clousure, Middleware, Result, ResultServer } from './types';
+export { OnClousure, OnMiddleware, Result, ResultServer } from './types';

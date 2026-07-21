@@ -2,9 +2,9 @@ import { Optional } from '@rolster/commons';
 import { createFromInvertly } from '@rolster/invertly';
 import { NextFunction, Request, Response } from 'express';
 import { existsMiddleware } from '../stores/middlerare.store';
-import { Middleware, MiddlewareRoute, MiddlewareToken } from '../types';
+import { MiddlewareRoute, MiddlewareToken, OnMiddleware } from '../types';
 
-function valueIsMiddleware(value: any): value is Middleware {
+function valueIsMiddleware(value: any): value is OnMiddleware {
   return typeof value['middleware'] === 'function';
 }
 

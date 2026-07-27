@@ -65,17 +65,19 @@ HTTP verb:
 import { Controller, Get, Post } from '@rolster/coopplins-server';
 
 @Controller('/users')
-export class UserController { /* ... */ }
+export class UserController {
+  /* ... */
+}
 ```
 
-| Decorator   | Signature                              |
-| ----------- | -------------------------------------- |
-| `@Get`      | `Get(path = '/', options?)`            |
-| `@Post`     | `Post(path = '/', options?)`           |
-| `@Put`      | `Put(path = '/', options?)`            |
-| `@Patch`    | `Patch(path = '/', options?)`          |
-| `@Delete`   | `Delete(path = '/', options?)`         |
-| `@Options`  | `Options(path = '/', options?)`        |
+| Decorator  | Signature                       |
+| ---------- | ------------------------------- |
+| `@Get`     | `Get(path = '/', options?)`     |
+| `@Post`    | `Post(path = '/', options?)`    |
+| `@Put`     | `Put(path = '/', options?)`     |
+| `@Patch`   | `Patch(path = '/', options?)`   |
+| `@Delete`  | `Delete(path = '/', options?)`  |
+| `@Options` | `Options(path = '/', options?)` |
 
 The route `options` accept `{ middlewares?, statusCode? }`.
 
@@ -83,16 +85,16 @@ The route `options` accept `{ middlewares?, statusCode? }`.
 
 Extract request data straight into method parameters:
 
-| Decorator                              | Reads                                  |
-| -------------------------------------- | -------------------------------------- |
-| `@Body(key?)`                          | request body (or `body[key]`)          |
-| `@Path(key, dataType?)`                | a URL parameter (`:id`)                |
-| `@PathNumber(key)` / `@PathBool(key)`  | URL parameter coerced to number/bool   |
-| `@Query(key, dataType?)`               | a query-string parameter               |
-| `@QueryNumber(key)` / `@QueryBool(key)`| query parameter coerced to number/bool |
-| `@Header(key, dataType?)`              | an HTTP header                         |
-| `@HeaderNumber(key)` / `@HeaderBool(key)` | header coerced to number/bool       |
-| `@Inject(token)`                       | a DI dependency into the parameter     |
+| Decorator                                 | Reads                                  |
+| ----------------------------------------- | -------------------------------------- |
+| `@Body(key?)`                             | request body (or `body[key]`)          |
+| `@Path(key, dataType?)`                   | a URL parameter (`:id`)                |
+| `@PathNumber(key)` / `@PathBool(key)`     | URL parameter coerced to number/bool   |
+| `@Query(key, dataType?)`                  | a query-string parameter               |
+| `@QueryNumber(key)` / `@QueryBool(key)`   | query parameter coerced to number/bool |
+| `@Header(key, dataType?)`                 | an HTTP header                         |
+| `@HeaderNumber(key)` / `@HeaderBool(key)` | header coerced to number/bool          |
+| `@Inject(token)`                          | a DI dependency into the parameter     |
 
 ### Middlewares
 
@@ -105,15 +107,15 @@ option. `@Clousure(options?)` registers a shutdown/cleanup handler.
 Route methods return a `ResultServer` built with the result helpers. The
 framework maps each to the right HTTP status code:
 
-| Helper                          | Status |
-| ------------------------------- | ------ |
-| `resultSuccessful(data)`        | 200    |
-| `resultBadRequest(data)`        | 400    |
-| `resultUnauthorized(data)`      | 401    |
-| `resultForbidden(data)`         | 403    |
-| `resultNotFound(data)`          | 404    |
-| `resultDomainError(data)`       | 422    |
-| `resultInternalServerError(data)` | 500  |
+| Helper                            | Status |
+| --------------------------------- | ------ |
+| `resultSuccessful(data)`          | 200    |
+| `resultBadRequest(data)`          | 400    |
+| `resultUnauthorized(data)`        | 401    |
+| `resultForbidden(data)`           | 403    |
+| `resultNotFound(data)`            | 404    |
+| `resultDomainError(data)`         | 422    |
+| `resultInternalServerError(data)` | 500    |
 
 You can also `throw` the matching exception classes (`BadRequestError`,
 `UnauthorizedError`, `ForbiddenError`, `NotFoundError`, `DomainError`,

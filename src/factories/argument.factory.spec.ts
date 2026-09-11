@@ -71,7 +71,7 @@ describe('createHttpArguments', () => {
 
     const args = createHttpArguments(controller, 'execute', request);
 
-    expect(args[0].valueOf()).toBe(42);
+    expect(args[0]).toBe(42);
   });
 
   it('should extract query argument', () => {
@@ -119,7 +119,7 @@ describe('createHttpArguments', () => {
 
     const args = createHttpArguments(controller, 'execute', request);
 
-    expect(args[0].valueOf()).toBe(5);
+    expect(args[0]).toBe(5);
   });
 
   it('should return undefined for missing value', () => {

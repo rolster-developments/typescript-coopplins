@@ -13,7 +13,7 @@ function resolveValue(value: any, dataType?: ArgumentsDataType): any {
 
   switch (dataType) {
     case 'number':
-      return new Number(value);
+      return Number(value);
     case 'boolean':
       return parseBoolean(value);
     default:

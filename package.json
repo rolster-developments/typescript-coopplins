@@ -60,7 +60,6 @@
     "@rolster/rollup": "^3.0.0",
     "@rolster/types": "^1.1.2",
     "@types/express": "^5.0.6",
-    "@vitest/coverage-v8": "^5.0.0",
     "eslint": "^10.7.0",
     "eslint-plugin-perfectionist": "^5.10.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",

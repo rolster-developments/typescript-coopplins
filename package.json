@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@rolster/commons": "^4.3.0",
-    "@rolster/invertly": "^4.3.2",
+    "@rolster/invertly": "^4.4.0",
     "@sentry/node": "^10.74.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",

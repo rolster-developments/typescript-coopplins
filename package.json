@@ -47,7 +47,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@rolster/commons": "^4.2.4",
+    "@rolster/commons": "^4.3.0",
     "@rolster/invertly": "^4.3.2",
     "@sentry/node": "^10.74.0",
     "dotenv": "^17.4.2",
